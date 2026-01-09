@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>For You ❤️</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffeef2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-size: 48px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="text"></div>
+
+  <script>
+    const message = "hi aarjav!";
+    let index = 0;
+    const speed = 150; // typing speed in ms
+
+    function typeText() {
+      if (index < message.length) {
+        document.getElementById("text").innerHTML += message.charAt(index);
+        index++;
+        setTimeout(typeText, speed);
+      }
+    }
+
+    window.onload = typeText;
+  </script>
+
+</body>
+</html>
