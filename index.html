@@ -22,10 +22,15 @@
       margin-top: 20px;
     }
 
-    #hint {
-      font-size: 16px;
-      margin-top: 30px;
-      opacity: 0.6;
+    .heart {
+      display: inline-block;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+      100% { transform: scale(1); }
     }
 
     @keyframes fadeIn {
@@ -39,14 +44,45 @@
 
   <div id="line1"></div>
   <div id="line2"></div>
-  <div id="hint">click anywhere 💌</div>
 
   <script>
     const firstMessage = "hi aarjav";
-    const secondMessage = "happy anniversary ❤️";
+    const secondMessage = "happy anniversary <span class='heart'>❤️</span>";
 
     let index1 = 0;
     let index2 = 0;
     const speed = 150;
 
-    let firstDo
+    let firstDone = false;
+    let secondStarted = false;
+
+    function typeFirst() {
+      if (index1 < firstMessage.length) {
+        document.getElementById("line1").innerHTML += firstMessage.charAt(index1);
+        index1++;
+        setTimeout(typeFirst, speed);
+      } else {
+        firstDone = true;
+      }
+    }
+
+    function typeSecond() {
+      if (index2 < secondMessage.length) {
+        document.getElementById("line2").innerHTML = secondMessage.slice(0, index2 + 1);
+        index2++;
+        setTimeout(typeSecond, speed);
+      }
+    }
+
+    window.onload = typeFirst;
+
+    document.body.addEventListener("click", () => {
+      if (firstDone && !secondStarted) {
+        secondStarted = true;
+        typeSecond();
+      }
+    });
+  </script>
+
+</body>
+</html>
