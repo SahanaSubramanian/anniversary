@@ -11,6 +11,8 @@
       align-items: center;
       height: 100vh;
       font-size: 48px;
+      text-align: center;
+      cursor: pointer;
     }
   </style>
 </head>
@@ -19,19 +21,36 @@
   <div id="text"></div>
 
   <script>
-    const message = "hi aarjav!";
+    const firstMessage = "hi aarjav";
+    const secondMessage = "happy anniversary ❤️";
     let index = 0;
-    const speed = 150; // typing speed in ms
+    let stage = 1; // 1 = first message, 2 = second message
+    const speed = 150;
+    let typingDone = false;
 
-    function typeText() {
+    function typeMessage(message) {
       if (index < message.length) {
         document.getElementById("text").innerHTML += message.charAt(index);
         index++;
-        setTimeout(typeText, speed);
+        setTimeout(() => typeMessage(message), speed);
+      } else {
+        typingDone = true;
       }
     }
 
-    window.onload = typeText;
+    window.onload = () => {
+      typeMessage(firstMessage);
+    };
+
+    document.body.addEventListener("click", () => {
+      if (typingDone && stage === 1) {
+        stage = 2;
+        typingDone = false;
+        index = 0;
+        document.getElementById("text").innerHTML = "";
+        typeMessage(secondMessage);
+      }
+    });
   </script>
 
 </body>
