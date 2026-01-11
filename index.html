@@ -47,7 +47,7 @@
 
   <script>
     const firstMessage = "hi aarjav";
-    const secondMessage = "happy anniversary <span class='heart'>❤️</span>";
+    const secondMessage = "happy anniversary ";
 
     let index1 = 0;
     let index2 = 0;
@@ -68,9 +68,12 @@
 
     function typeSecond() {
       if (index2 < secondMessage.length) {
-        document.getElementById("line2").innerHTML = secondMessage.slice(0, index2 + 1);
+        document.getElementById("line2").innerHTML += secondMessage.charAt(index2);
         index2++;
         setTimeout(typeSecond, speed);
+      } else {
+        // add pulsing heart only after text is finished
+        document.getElementById("line2").innerHTML += "<span class='heart'>❤️</span>";
       }
     }
 
