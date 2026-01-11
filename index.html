@@ -31,7 +31,7 @@
 
     @keyframes blink { 50% { background-color: transparent; } }
 
-    /* Second page typing line */
+    /* Pre-gallery typing line */
     #preGalleryMessage {
       display: none;
       font-size: 36px;
@@ -39,9 +39,9 @@
       margin-top: 20px;
     }
 
-    /* Gallery - 4 columns */
+    /* Masonry gallery - 4 columns */
     .gallery {
-      display: none;
+      display: none;       /* hidden by default */
       width: 100%;
       column-count: 4;
       column-gap: 20px;
@@ -56,6 +56,7 @@
       border: 3px solid #fff;
       border-radius: 10px;
       cursor: pointer;
+      opacity: 1;
     }
 
     /* Next button */
@@ -108,7 +109,7 @@
   <div id="lineEllipsis2" class="line">&gt; </div>
   <div id="line3" class="line">&gt; </div>
 
-  <!-- Second page heading -->
+  <!-- Second page typing message -->
   <div id="preGalleryMessage">&gt; </div>
 
   <!-- First gallery -->
@@ -125,13 +126,12 @@
   </div>
 
   <script>
-    const speed = 100;
-
-    // --- Terminal messages ---
     const firstMessage = "hi aarjav!";
     const secondMessage = "happy anniversary ♥";
     const thirdMessage = "thank you for the best year :)";
+    const speed = 100;
 
+    // --- Terminal typing for first page ---
     function typeMessage(elementId, message, callback) {
       let index = 0;
       function typeChar() {
@@ -162,7 +162,9 @@
         typeEllipsis("lineEllipsis1", () => {
           typeMessage("line2", secondMessage, () => {
             typeEllipsis("lineEllipsis2", () => {
-              typeMessage("line3", thirdMessage, showSecondPageMessage);
+              typeMessage("line3", thirdMessage, () => {
+                showSecondPageMessage();
+              });
             });
           });
         });
@@ -171,7 +173,7 @@
 
     window.onload = startTyping;
 
-    // --- Second page typing ---
+    // --- Second page typing effect ---
     function showSecondPageMessage() {
       document.querySelectorAll('.line, .cursor').forEach(el => el.style.display = 'none');
       document.body.style.backgroundColor = "#ffb6c1";
@@ -196,58 +198,68 @@
       typeChar();
     }
 
-    // --- Image lists (inline) ---
-    const gallery1Images = ["photo1.jpg","photo2.jpg","photo3.jpg"];
-    const gallery2Images = ["photo4.jpg","photo5.jpg","photo6.jpg"];
-
-    function showGallery1() {
+    // --- Show first gallery ---
+    async function showGallery1() {
       const gallery1 = document.getElementById("gallery1");
       gallery1.style.display = "block";
 
       const nextBtn = document.getElementById("nextBtn");
       nextBtn.style.display = "block";
 
-      // Add images
-      gallery1Images.forEach(filename => {
-        const img = document.createElement("img");
-        img.src = "images/" + filename;
-        img.alt = "Us";
+      try {
+        const response = await fetch('images/gallery1.json');
+        const images = await response.json();
 
-        img.addEventListener("click", () => {
-          const modal = document.getElementById("modal");
-          const modalImg = document.getElementById("modalImg");
-          modalImg.src = img.src;
-          modal.style.display = "flex";
+        images.forEach(filename => {
+          const img = document.createElement("img");
+          img.src = "images/" + filename;
+          img.alt = "Us";
+
+          img.addEventListener("click", () => {
+            const modal = document.getElementById("modal");
+            const modalImg = document.getElementById("modalImg");
+            modalImg.src = img.src;
+            modal.style.display = "flex";
+          });
+
+          gallery1.appendChild(img);
         });
 
-        gallery1.appendChild(img);
-      });
+      } catch(err) { console.error(err); }
 
+      // Next button goes to gallery2
       nextBtn.onclick = showGallery2;
     }
 
-    function showGallery2() {
+    // --- Show second gallery ---
+    async function showGallery2() {
       document.getElementById("gallery1").style.display = "none";
       const gallery2 = document.getElementById("gallery2");
       gallery2.style.display = "block";
 
-      gallery2Images.forEach(filename => {
-        const img = document.createElement("img");
-        img.src = "images/" + filename;
-        img.alt = "Us";
+      try {
+        const response = await fetch('images/gallery2.json');
+        const images = await response.json();
 
-        img.addEventListener("click", () => {
-          const modal = document.getElementById("modal");
-          const modalImg = document.getElementById("modalImg");
-          modalImg.src = img.src;
-          modal.style.display = "flex";
+        images.forEach(filename => {
+          const img = document.createElement("img");
+          img.src = "images/" + filename;
+          img.alt = "Us";
+
+          img.addEventListener("click", () => {
+            const modal = document.getElementById("modal");
+            const modalImg = document.getElementById("modalImg");
+            modalImg.src = img.src;
+            modal.style.display = "flex";
+          });
+
+          gallery2.appendChild(img);
         });
 
-        gallery2.appendChild(img);
-      });
+      } catch(err) { console.error(err); }
     }
 
-    // --- Modal ---
+    // Close modal on click
     document.getElementById("modal").addEventListener("click", () => {
       document.getElementById("modal").style.display = "none";
     });
