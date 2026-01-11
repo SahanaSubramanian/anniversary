@@ -17,6 +17,7 @@
       text-align: left;
       overflow: auto;
       transition: background-color 0.5s ease;
+      position: relative;
     }
 
     .line { display: block; }
@@ -31,7 +32,6 @@
 
     @keyframes blink { 50% { background-color: transparent; } }
 
-    /* Second page typing line */
     #preGalleryMessage {
       display: none;
       font-size: 36px;
@@ -39,14 +39,12 @@
       margin-top: 20px;
     }
 
-    /* Masonry gallery - 4 columns */
     .gallery {
       display: none;
       width: 100%;
       column-count: 4;
       column-gap: 20px;
       margin-top: 20px;
-      position: relative;
     }
 
     .gallery img {
@@ -58,12 +56,11 @@
       cursor: pointer;
     }
 
-    /* Next button */
     #nextBtn {
       display: none;
-      position: absolute;
-      top: 0;
-      right: 0;
+      position: fixed;
+      top: 20px;
+      right: 20px;
       font-size: 24px;
       padding: 10px 20px;
       background-color: #ff69b4;
@@ -78,7 +75,6 @@
     @media (max-width: 800px) { .gallery { column-count: 2; } }
     @media (max-width: 500px) { .gallery { column-count: 1; } }
 
-    /* Modal for clicked image */
     #modal {
       display: none;
       position: fixed;
@@ -96,43 +92,43 @@
       border: 5px solid #fff;
       border-radius: 10px;
     }
+
+    #hiPage {
+      display: none;
+      margin-top: 50px;
+      font-size: 48px;
+    }
   </style>
 </head>
 
 <body>
 
-  <!-- Terminal messages -->
   <div id="line1" class="line">&gt; </div><span class="cursor"></span>
   <div id="lineEllipsis1" class="line">&gt; </div>
   <div id="line2" class="line">&gt; </div>
   <div id="lineEllipsis2" class="line">&gt; </div>
   <div id="line3" class="line">&gt; </div>
 
-  <!-- Second page heading -->
   <div id="preGalleryMessage">&gt; </div>
 
-  <!-- First gallery -->
-  <div id="gallery1" class="gallery">
-    <button id="nextBtn">Next</button>
-  </div>
+  <button id="nextBtn">Next</button>
 
-  <!-- Second gallery -->
+  <div id="gallery1" class="gallery"></div>
   <div id="gallery2" class="gallery"></div>
 
-  <!-- Modal -->
   <div id="modal">
     <img id="modalImg" src="">
   </div>
 
+  <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
+
   <script>
     const speed = 100;
 
-    // Terminal messages
     const firstMessage = "hi aarjav!";
     const secondMessage = "happy anniversary ♥";
     const thirdMessage = "thank you for the best year :)";
 
-    // --- Typing functions ---
     function typeMessage(elementId, message, callback) {
       let index = 0;
       function typeChar() {
@@ -172,14 +168,12 @@
 
     window.onload = startTyping;
 
-    // --- Second page typing ---
     function showSecondPageMessage() {
       document.querySelectorAll('.line, .cursor').forEach(el => el.style.display = 'none');
       document.body.style.backgroundColor = "#ffb6c1";
 
       const msgEl = document.getElementById("preGalleryMessage");
-      msgEl.innerHTML = "&gt; "; // reset with >
-
+      msgEl.innerHTML = "&gt; ";
       const message = "my favorite photos (solo shots first)";
       let index = 0;
 
@@ -197,11 +191,20 @@
       typeChar();
     }
 
-    // --- Inline image lists ---
-    const gallery1Images = ["lp_image 8.jpg","lp_image 3.jpg","lp_image 2.jpg","lp_image 4.jpg","lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"];
-    const gallery2Images = [ "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg","IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg","5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"];
+    // --- Your actual image filenames ---
+    const gallery1Images = [
+      "lp_image 8.jpg","lp_image 3.jpg","lp_image 2.jpg","lp_image 4.jpg",
+      "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg",
+      "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
+    ];
 
-    // --- Show first gallery ---
+    const gallery2Images = [
+      "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
+      "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg",
+      "5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"
+    ];
+
+    // Show first gallery
     function showGallery1() {
       const gallery1 = document.getElementById("gallery1");
       gallery1.style.display = "block";
@@ -224,12 +227,35 @@
         gallery1.appendChild(img);
       });
 
-      nextBtn.onclick = showGallery2;
+      nextBtn.onclick = showHiPage;
     }
 
-    // --- Show second gallery ---
-    function showGallery2() {
+    function showHiPage() {
       document.getElementById("gallery1").style.display = "none";
+      document.getElementById("preGalleryMessage").style.display = "none";
+      document.getElementById("nextBtn").style.display = "none";
+
+      const hiPage = document.getElementById("hiPage");
+      const hiText = document.getElementById("hiText");
+      hiPage.style.display = "block";
+
+      let index = 0;
+      const message = "hi";
+      function typeHi() {
+        if (index < message.length) {
+          hiText.innerHTML += message.charAt(index);
+          index++;
+          setTimeout(typeHi, speed);
+        } else {
+          setTimeout(showGallery2, 1000);
+        }
+      }
+      hiText.innerHTML = "";
+      typeHi();
+    }
+
+    function showGallery2() {
+      document.getElementById("hiPage").style.display = "none";
       const gallery2 = document.getElementById("gallery2");
       gallery2.style.display = "block";
 
@@ -249,7 +275,7 @@
       });
     }
 
-    // --- Modal ---
+    // Modal
     document.getElementById("modal").addEventListener("click", () => {
       document.getElementById("modal").style.display = "none";
     });
