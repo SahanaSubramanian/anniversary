@@ -35,7 +35,7 @@
 
   <script>
     const firstMessage = "hi aarjav!";
-    const secondMessage = "happy anniversary &hearts";
+    const secondMessage = "happy anniversary &hearts;"; // HTML entity for heart
 
     let index1 = 0;
     let index2 = 0;
@@ -47,7 +47,6 @@
         index1++;
         setTimeout(typeFirst, speed);
       } else {
-        // Start second message automatically when first finishes
         typeSecond();
       }
     }
@@ -60,10 +59,8 @@
       }
     }
 
-    // Start the first message automatically on page load
     window.onload = typeFirst;
   </script>
 
 </body>
 </html>
-
