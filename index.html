@@ -5,8 +5,9 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background-color: #ffeef2;
+      font-family: "Courier New", Courier, monospace; /* Terminal font */
+      background-color: #000000; /* Black terminal background */
+      color: #00ff00; /* Classic green text */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -14,23 +15,36 @@
       height: 100vh;
       font-size: 48px;
       text-align: center;
-      animation: fadeIn 2s ease;
+      animation: fadeIn 1s ease;
     }
 
     #line2 {
       margin-top: 20px;
     }
 
+    /* Blinking cursor effect */
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff00;
+      margin-left: 2px;
+      animation: blink 1s step-start infinite;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
+    }
+
+    @keyframes blink {
+      50% { background-color: transparent; }
     }
   </style>
 </head>
 
 <body>
 
-  <div id="line1"></div>
+  <div id="line1"></div><span class="cursor"></span>
   <div id="line2"></div>
 
   <script>
@@ -39,7 +53,7 @@
 
     let index1 = 0;
     let index2 = 0;
-    const speed = 150;
+    const speed = 100;
 
     function typeFirst() {
       if (index1 < firstMessage.length) {
