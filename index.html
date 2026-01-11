@@ -28,7 +28,6 @@
       opacity: 0.6;
     }
 
-
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -43,44 +42,11 @@
   <div id="hint">click anywhere 💌</div>
 
   <script>
-    const firstMessage = "hi aarjav!";
-    const secondMessage = "happy anniversary <span class='heart'>❤️</span>";
+    const firstMessage = "hi aarjav";
+    const secondMessage = "happy anniversary ❤️";
 
     let index1 = 0;
     let index2 = 0;
     const speed = 150;
 
-    let firstDone = false;
-    let secondStarted = false;
-
-    function typeFirst() {
-      if (index1 < firstMessage.length) {
-        document.getElementById("line1").innerHTML += firstMessage.charAt(index1);
-        index1++;
-        setTimeout(typeFirst, speed);
-      } else {
-        firstDone = true;
-      }
-    }
-
-    function typeSecond() {
-      if (index2 < secondMessage.length) {
-        document.getElementById("line2").innerHTML = secondMessage.slice(0, index2 + 1);
-        index2++;
-        setTimeout(typeSecond, speed);
-      }
-    }
-
-    window.onload = typeFirst;
-
-    document.body.addEventListener("click", () => {
-      if (firstDone && !secondStarted) {
-        secondStarted = true;
-        document.getElementById("hint").style.display = "none";
-        typeSecond();
-      }
-    });
-  </script>
-
-</body>
-</html>
+    let firstDo
