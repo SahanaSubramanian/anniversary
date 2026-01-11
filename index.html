@@ -93,9 +93,10 @@
       border-radius: 10px;
     }
 
+    /* hi heading for Gallery 2 */
     #hiPage {
       display: none;
-      margin-top: 50px;
+      margin-top: 20px;
       font-size: 48px;
     }
   </style>
@@ -103,6 +104,7 @@
 
 <body>
 
+  <!-- Terminal typing first page -->
   <div id="line1" class="line">&gt; </div><span class="cursor"></span>
   <div id="lineEllipsis1" class="line">&gt; </div>
   <div id="line2" class="line">&gt; </div>
@@ -113,14 +115,19 @@
 
   <button id="nextBtn">Next</button>
 
+  <!-- Gallery 1 -->
   <div id="gallery1" class="gallery"></div>
+
+  <!-- hi heading for Gallery 2 -->
+  <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
+
+  <!-- Gallery 2 -->
   <div id="gallery2" class="gallery"></div>
 
+  <!-- Modal -->
   <div id="modal">
     <img id="modalImg" src="">
   </div>
-
-  <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
 
   <script>
     const speed = 100;
@@ -129,6 +136,19 @@
     const secondMessage = "happy anniversary ♥";
     const thirdMessage = "thank you for the best year :)";
 
+    const gallery1Images = [
+      "lp_image 8.jpg","lp_image 3.jpg","lp_image 2.jpg","lp_image 4.jpg",
+      "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg",
+      "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
+    ];
+
+    const gallery2Images = [
+      "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
+      "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg",
+      "5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"
+    ];
+
+    // Terminal typing functions
     function typeMessage(elementId, message, callback) {
       let index = 0;
       function typeChar() {
@@ -190,18 +210,6 @@
       msgEl.style.display = "block";
       typeChar();
     }
-
-    const gallery1Images = [
-      "lp_image 8.jpg","lp_image 3.jpg","lp_image 2.jpg","lp_image 4.jpg",
-      "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg",
-      "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
-    ];
-
-    const gallery2Images = [
-      "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
-      "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg",
-      "5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"
-    ];
 
     function showGallery1() {
       const gallery1 = document.getElementById("gallery1");
