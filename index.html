@@ -22,10 +22,6 @@
       display: block;
     }
 
-    #line2, #line3 {
-      margin-top: 10px;
-    }
-
     /* Blinking cursor */
     .cursor {
       display: inline-block;
@@ -44,7 +40,9 @@
 <body>
 
   <div id="line1" class="line">&gt; </div><span class="cursor"></span>
+  <div id="lineEllipsis1" class="line">&gt; </div>
   <div id="line2" class="line">&gt; </div>
+  <div id="lineEllipsis2" class="line">&gt; </div>
   <div id="line3" class="line">&gt; </div>
 
   <script>
@@ -54,7 +52,6 @@
 
     const speed = 100;
 
-    // Type a message character by character
     function typeMessage(elementId, message, callback) {
       let index = 0;
       function typeChar() {
@@ -63,35 +60,35 @@
           index++;
           setTimeout(typeChar, speed);
         } else {
-          // After message finishes, type "..." then call next callback
-          typeEllipsis(elementId, callback);
+          if (callback) callback();
         }
       }
       typeChar();
     }
 
-    // Type the "..." ellipsis
     function typeEllipsis(elementId, callback) {
-      let ellipsis = "...";
-      let i = 0;
-      function addDot() {
-        if (i < ellipsis.length) {
-          document.getElementById(elementId).innerHTML += ellipsis.charAt(i);
-          i++;
-          setTimeout(addDot, speed);
+      const ellipsis = "...";
+      let index = 0;
+      function typeDot() {
+        if (index < ellipsis.length) {
+          document.getElementById(elementId).innerHTML += ellipsis.charAt(index);
+          index++;
+          setTimeout(typeDot, speed);
         } else {
-          // Small pause after ...
           setTimeout(() => { if (callback) callback(); }, 300);
         }
       }
-      addDot();
+      typeDot();
     }
 
-    // Start typing each line automatically
     function startTyping() {
       typeMessage("line1", firstMessage, () => {
-        typeMessage("line2", secondMessage, () => {
-          typeMessage("line3", thirdMessage);
+        typeEllipsis("lineEllipsis1", () => {
+          typeMessage("line2", secondMessage, () => {
+            typeEllipsis("lineEllipsis2", () => {
+              typeMessage("line3", thirdMessage);
+            });
+          });
         });
       });
     }
