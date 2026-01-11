@@ -2,53 +2,92 @@
 <html>
 <head>
   <title>For You ❤️</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #ffeef2;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       font-size: 48px;
       text-align: center;
       cursor: pointer;
+      animation: fadeIn 2s ease;
+    }
+
+    #line2 {
+      margin-top: 20px;
+    }
+
+    #hint {
+      font-size: 16px;
+      margin-top: 30px;
+      opacity: 0.6;
+    }
+
+    .heart {
+      display: inline-block;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.25); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
   </style>
 </head>
+
 <body>
 
-  <div id="text"></div>
+  <div id="line1"></div>
+  <div id="line2"></div>
+  <div id="hint">click anywhere 💌</div>
 
   <script>
     const firstMessage = "hi aarjav";
-    const secondMessage = "happy anniversary ❤️";
-    let index = 0;
-    let stage = 1; // 1 = first message, 2 = second message
-    const speed = 150;
-    let typingDone = false;
+    const secondMessage = "happy anniversary <span class='heart'>❤️</span>";
 
-    function typeMessage(message) {
-      if (index < message.length) {
-        document.getElementById("text").innerHTML += message.charAt(index);
-        index++;
-        setTimeout(() => typeMessage(message), speed);
+    let index1 = 0;
+    let index2 = 0;
+    const speed = 150;
+
+    let firstDone = false;
+    let secondStarted = false;
+
+    function typeFirst() {
+      if (index1 < firstMessage.length) {
+        document.getElementById("line1").innerHTML += firstMessage.charAt(index1);
+        index1++;
+        setTimeout(typeFirst, speed);
       } else {
-        typingDone = true;
+        firstDone = true;
       }
     }
 
-    window.onload = () => {
-      typeMessage(firstMessage);
-    };
+    function typeSecond() {
+      if (index2 < secondMessage.length) {
+        document.getElementById("line2").innerHTML = secondMessage.slice(0, index2 + 1);
+        index2++;
+        setTimeout(typeSecond, speed);
+      }
+    }
+
+    window.onload = typeFirst;
 
     document.body.addEventListener("click", () => {
-      if (typingDone && stage === 1) {
-        stage = 2;
-        typingDone = false;
-        index = 0;
-        document.getElementById("text").innerHTML = "";
-        typeMessage(secondMessage);
+      if (firstDone && !secondStarted) {
+        secondStarted = true;
+        document.getElementById("hint").style.display = "none";
+        typeSecond();
       }
     });
   </script>
