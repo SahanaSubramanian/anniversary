@@ -6,34 +6,33 @@
   <style>
     body {
       font-family: "Courier New", Courier, monospace; /* Terminal font */
-      background-color: #000000; /* Black terminal background */
-      color: #00ff00; /* Classic green text */
+      background-color: #000; /* Black background */
+      color: #ffffff; /* White text */
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      justify-content: flex-start;
+      align-items: flex-end; /* Top-right corner */
+      padding: 20px; /* padding from edges */
       height: 100vh;
-      font-size: 48px;
-      text-align: center;
-      animation: fadeIn 1s ease;
+      font-size: 32px;
+      text-align: right;
     }
 
-    #line2 {
-      margin-top: 20px;
+    .line {
+      display: block;
     }
 
-    /* Blinking cursor effect */
+    #line2, #line3 {
+      margin-top: 10px;
+    }
+
+    /* Blinking cursor */
     .cursor {
       display: inline-block;
       width: 10px;
-      background-color: #00ff00;
+      background-color: #ffffff;
       margin-left: 2px;
       animation: blink 1s step-start infinite;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
     }
 
     @keyframes blink {
@@ -44,35 +43,52 @@
 
 <body>
 
-  <div id="line1"></div><span class="cursor"></span>
-  <div id="line2"></div>
+  <div id="line1" class="line">&gt; </div><span class="cursor"></span>
+  <div id="line2" class="line">&gt; </div>
+  <div id="line3" class="line">&gt; </div>
 
   <script>
     const firstMessage = "hi aarjav!";
     const secondMessage = "happy anniversary ♥";
+    const thirdMessage = "thank you for the best year :)";
 
     let index1 = 0;
     let index2 = 0;
+    let index3 = 0;
     const speed = 100;
 
+    // Type the first line
     function typeFirst() {
       if (index1 < firstMessage.length) {
         document.getElementById("line1").innerHTML += firstMessage.charAt(index1);
         index1++;
         setTimeout(typeFirst, speed);
       } else {
-        typeSecond();
+        typeSecond(); // automatically start second line
       }
     }
 
+    // Type the second line
     function typeSecond() {
       if (index2 < secondMessage.length) {
         document.getElementById("line2").innerHTML += secondMessage.charAt(index2);
         index2++;
         setTimeout(typeSecond, speed);
+      } else {
+        typeThird(); // automatically start third line
       }
     }
 
+    // Type the third line
+    function typeThird() {
+      if (index3 < thirdMessage.length) {
+        document.getElementById("line3").innerHTML += thirdMessage.charAt(index3);
+        index3++;
+        setTimeout(typeThird, speed);
+      }
+    }
+
+    // Start typing automatically on page load
     window.onload = typeFirst;
   </script>
 
