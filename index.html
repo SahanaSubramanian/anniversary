@@ -5,13 +5,13 @@
 
   <style>
     body {
-      font-family: "Courier New", Courier, monospace; /* Monospaced terminal font */
+      font-family: "Courier New", Courier, monospace;
       background-color: #000;
       color: #fff;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      align-items: flex-start; /* Upper-left corner */
+      align-items: flex-start;
       padding: 20px;
       height: 100vh;
       font-size: 32px;
@@ -19,9 +19,7 @@
       overflow: auto;
     }
 
-    .line {
-      display: block;
-    }
+    .line { display: block; }
 
     .cursor {
       display: inline-block;
@@ -31,11 +29,8 @@
       animation: blink 1s step-start infinite;
     }
 
-    @keyframes blink {
-      50% { background-color: transparent; }
-    }
+    @keyframes blink { 50% { background-color: transparent; } }
 
-    /* Gallery styles */
     #gallery {
       display: none;
       flex-wrap: wrap;
@@ -71,7 +66,6 @@
     const thirdMessage = "thank you for the best year :)";
     const speed = 100;
 
-    // Terminal typing functions
     function typeMessage(elementId, message, callback) {
       let index = 0;
       function typeChar() {
@@ -79,9 +73,7 @@
           document.getElementById(elementId).innerHTML += message.charAt(index);
           index++;
           setTimeout(typeChar, speed);
-        } else {
-          if (callback) callback();
-        }
+        } else { if (callback) callback(); }
       }
       typeChar();
     }
@@ -115,25 +107,26 @@
 
     window.onload = startTyping;
 
-    // Automatically generate gallery from a list of filenames
-    const imageFilenames = [
-      "photo1.jpg",
-      "photo2.jpg",
-      "photo3.jpg"
-      // Add more filenames as needed
-    ];
-
-    function showGallery() {
-      document.querySelectorAll('.line, .cursor').forEach(el => el.style.display = 'none'); // hide terminal
+    async function showGallery() {
+      // Hide terminal
+      document.querySelectorAll('.line, .cursor').forEach(el => el.style.display = 'none');
       const gallery = document.getElementById("gallery");
       gallery.style.display = "flex";
 
-      imageFilenames.forEach(file => {
-        const img = document.createElement("img");
-        img.src = "images/" + file; // assumes images are in the images/ folder
-        img.alt = "Us";
-        gallery.appendChild(img);
-      });
+      // Fetch JSON list of images
+      try {
+        const response = await fetch('images/images.json');
+        const imageFilenames = await response.json();
+
+        imageFilenames.forEach(file => {
+          const img = document.createElement("img");
+          img.src = "images/" + file;
+          img.alt = "Us";
+          gallery.appendChild(img);
+        });
+      } catch(err) {
+        console.error("Error loading images.json:", err);
+      }
     }
 
     document.body.addEventListener("click", showGallery);
