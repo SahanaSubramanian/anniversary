@@ -5,17 +5,17 @@
 
   <style>
     body {
-      font-family: "Courier New", Courier, monospace; /* Terminal font */
+      font-family: "Courier New", Courier, monospace; /* Monospaced terminal font */
       background-color: #000; /* Black background */
       color: #ffffff; /* White text */
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      align-items: flex-end; /* Top-right corner */
-      padding: 20px; /* padding from edges */
+      align-items: flex-start; /* Upper-left corner */
+      padding: 20px;
       height: 100vh;
       font-size: 32px;
-      text-align: right;
+      text-align: left;
     }
 
     .line {
@@ -52,44 +52,51 @@
     const secondMessage = "happy anniversary ♥";
     const thirdMessage = "thank you for the best year :)";
 
-    let index1 = 0;
-    let index2 = 0;
-    let index3 = 0;
     const speed = 100;
 
-    // Type the first line
-    function typeFirst() {
-      if (index1 < firstMessage.length) {
-        document.getElementById("line1").innerHTML += firstMessage.charAt(index1);
-        index1++;
-        setTimeout(typeFirst, speed);
-      } else {
-        typeSecond(); // automatically start second line
+    // Type a message character by character
+    function typeMessage(elementId, message, callback) {
+      let index = 0;
+      function typeChar() {
+        if (index < message.length) {
+          document.getElementById(elementId).innerHTML += message.charAt(index);
+          index++;
+          setTimeout(typeChar, speed);
+        } else {
+          // After message finishes, type "..." then call next callback
+          typeEllipsis(elementId, callback);
+        }
       }
+      typeChar();
     }
 
-    // Type the second line
-    function typeSecond() {
-      if (index2 < secondMessage.length) {
-        document.getElementById("line2").innerHTML += secondMessage.charAt(index2);
-        index2++;
-        setTimeout(typeSecond, speed);
-      } else {
-        typeThird(); // automatically start third line
+    // Type the "..." ellipsis
+    function typeEllipsis(elementId, callback) {
+      let ellipsis = "...";
+      let i = 0;
+      function addDot() {
+        if (i < ellipsis.length) {
+          document.getElementById(elementId).innerHTML += ellipsis.charAt(i);
+          i++;
+          setTimeout(addDot, speed);
+        } else {
+          // Small pause after ...
+          setTimeout(() => { if (callback) callback(); }, 300);
+        }
       }
+      addDot();
     }
 
-    // Type the third line
-    function typeThird() {
-      if (index3 < thirdMessage.length) {
-        document.getElementById("line3").innerHTML += thirdMessage.charAt(index3);
-        index3++;
-        setTimeout(typeThird, speed);
-      }
+    // Start typing each line automatically
+    function startTyping() {
+      typeMessage("line1", firstMessage, () => {
+        typeMessage("line2", secondMessage, () => {
+          typeMessage("line3", thirdMessage);
+        });
+      });
     }
 
-    // Start typing automatically on page load
-    window.onload = typeFirst;
+    window.onload = startTyping;
   </script>
 
 </body>
