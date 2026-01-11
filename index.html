@@ -6,7 +6,7 @@
   <style>
     body {
       font-family: "Courier New", Courier, monospace;
-      background-color: #000;
+      background-color: #000; /* Initial terminal black */
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -17,6 +17,7 @@
       font-size: 32px;
       text-align: left;
       overflow: auto;
+      transition: background-color 0.5s ease; /* Smooth color transition */
     }
 
     .line { display: block; }
@@ -45,6 +46,13 @@
       border: 3px solid #fff;
       border-radius: 10px;
     }
+
+    #preGalleryMessage {
+      display: none;
+      font-size: 36px;
+      color: #fff;
+      margin-top: 20px;
+    }
   </style>
 </head>
 
@@ -54,8 +62,9 @@
   <div id="line1" class="line">&gt; </div><span class="cursor"></span>
   <div id="lineEllipsis1" class="line">&gt; </div>
   <div id="line2" class="line">&gt; </div>
-  <div id="lineEllipsis2" class="line">&gt; </div>
-  <div id="line3" class="line">&gt; </div>
+
+  <!-- Pink pre-gallery message -->
+  <div id="preGalleryMessage">some silly photos...</div>
 
   <!-- Gallery container -->
   <div id="gallery"></div>
@@ -63,9 +72,9 @@
   <script>
     const firstMessage = "hi aarjav!";
     const secondMessage = "happy anniversary ♥";
-    const thirdMessage = "thank you for the best year :)";
     const speed = 100;
 
+    // Terminal typing functions
     function typeMessage(elementId, message, callback) {
       let index = 0;
       function typeChar() {
@@ -93,13 +102,13 @@
       typeDot();
     }
 
+    // Start typing the terminal
     function startTyping() {
       typeMessage("line1", firstMessage, () => {
         typeEllipsis("lineEllipsis1", () => {
           typeMessage("line2", secondMessage, () => {
-            typeEllipsis("lineEllipsis2", () => {
-              typeMessage("line3", thirdMessage);
-            });
+            // After happy anniversary, switch to pink pre-gallery screen
+            showPreGalleryMessage();
           });
         });
       });
@@ -107,13 +116,30 @@
 
     window.onload = startTyping;
 
-    async function showGallery() {
-      // Hide terminal
+    // Show pink screen with "some silly photos..."
+    function showPreGalleryMessage() {
+      // Hide terminal lines
       document.querySelectorAll('.line, .cursor').forEach(el => el.style.display = 'none');
+      
+      // Change background to pink
+      document.body.style.backgroundColor = "#ffb6c1"; // light pink
+      
+      const msg = document.getElementById("preGalleryMessage");
+      msg.style.display = "block";
+
+      // Wait 1.5s then show gallery
+      setTimeout(showGallery, 1500);
+    }
+
+    // Automatically load gallery
+    async function showGallery() {
+      // Hide pre-gallery message
+      document.getElementById("preGalleryMessage").style.display = "none";
+
       const gallery = document.getElementById("gallery");
       gallery.style.display = "flex";
 
-      // Fetch JSON list of images
+      // Fetch image filenames JSON
       try {
         const response = await fetch('images/images.json');
         const imageFilenames = await response.json();
@@ -128,8 +154,6 @@
         console.error("Error loading images.json:", err);
       }
     }
-
-    document.body.addEventListener("click", showGallery);
   </script>
 
 </body>
