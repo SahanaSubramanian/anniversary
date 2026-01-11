@@ -17,7 +17,7 @@
       font-size: 32px;
       text-align: left;
       overflow: auto;
-      transition: background-color 0.5s ease; /* Smooth color change */
+      transition: background-color 0.5s ease;
     }
 
     .line { display: block; }
@@ -36,4 +36,138 @@
       display: none;
       flex-wrap: wrap;
       gap: 20px;
-      margin-top
+      margin-top: 20px;
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    #gallery img {
+      max-width: 300px;
+      border: 3px solid #fff;
+      border-radius: 10px;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #preGalleryMessage {
+      display: none;
+      font-size: 36px;
+      color: #fff;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Terminal messages -->
+  <div id="line1" class="line">&gt; </div><span class="cursor"></span>
+  <div id="lineEllipsis1" class="line">&gt; </div>
+  <div id="line2" class="line">&gt; </div>
+  <div id="lineEllipsis2" class="line">&gt; </div>
+  <div id="line3" class="line">&gt; </div>
+
+  <!-- Pink pre-gallery message -->
+  <div id="preGalleryMessage">some silly photos...</div>
+
+  <!-- Gallery container -->
+  <div id="gallery"></div>
+
+  <script>
+    const firstMessage = "hi aarjav!";
+    const secondMessage = "happy anniversary ♥";
+    const thirdMessage = "thank you for the best year :)";
+    const speed = 100;
+
+    function typeMessage(elementId, message, callback) {
+      let index = 0;
+      function typeChar() {
+        if (index < message.length) {
+          document.getElementById(elementId).innerHTML += message.charAt(index);
+          index++;
+          setTimeout(typeChar, speed);
+        } else { if (callback) callback(); }
+      }
+      typeChar();
+    }
+
+    function typeEllipsis(elementId, callback) {
+      const ellipsis = "...";
+      let index = 0;
+      function typeDot() {
+        if (index < ellipsis.length) {
+          document.getElementById(elementId).innerHTML += ellipsis.charAt(index);
+          index++;
+          setTimeout(typeDot, speed);
+        } else {
+          setTimeout(() => { if (callback) callback(); }, 300);
+        }
+      }
+      typeDot();
+    }
+
+    // Start terminal typing
+    function startTyping() {
+      typeMessage("line1", firstMessage, () => {
+        typeEllipsis("lineEllipsis1", () => {
+          typeMessage("line2", secondMessage, () => {
+            typeEllipsis("lineEllipsis2", () => {
+              typeMessage("line3", thirdMessage, () => {
+                showPreGalleryMessage();
+              });
+            });
+          });
+        });
+      });
+    }
+
+    window.onload = startTyping;
+
+    async function showPreGalleryMessage() {
+      // Hide terminal lines
+      document.querySelectorAll('.line, .cursor').forEach(el => el.style.display = 'none');
+
+      // Switch to pink background
+      document.body.style.backgroundColor = "#ffb6c1";
+
+      const msg = document.getElementById("preGalleryMessage");
+      msg.style.display = "block";
+
+      // Wait longer before showing gallery
+      setTimeout(showGallery, 2500); // 2.5 seconds delay
+    }
+
+    async function showGallery() {
+      // Hide pre-gallery message
+      document.getElementById("preGalleryMessage").style.display = "none";
+
+      const gallery = document.getElementById("gallery");
+      gallery.style.display = "flex";
+
+      // Fetch images JSON
+      try {
+        const response = await fetch('images/images.json');
+        const imageFilenames = await response.json();
+
+        // Show photos one by one with fade
+        for (let i = 0; i < imageFilenames.length; i++) {
+          const img = document.createElement("img");
+          img.src = "images/" + imageFilenames[i];
+          img.alt = "Us";
+          gallery.appendChild(img);
+
+          // Fade in
+          setTimeout(() => { img.style.opacity = 1; }, 50);
+
+          // Delay before next image
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+      } catch(err) {
+        console.error("Error loading images.json:", err);
+      }
+    }
+  </script>
+
+</body>
+</html>
