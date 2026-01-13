@@ -55,25 +55,6 @@
       cursor: pointer;
     }
 
-    #nextBtn {
-      display: none;
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      font-size: 24px;
-      padding: 10px 20px;
-      background-color: #ff69b4;
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      z-index: 100;
-    }
-
-    @media (max-width: 1200px) { .gallery { column-count: 3; } }
-    @media (max-width: 800px) { .gallery { column-count: 2; } }
-    @media (max-width: 500px) { .gallery { column-count: 1; } }
-
     #modal {
       display: none;
       position: fixed;
@@ -104,21 +85,21 @@
       position: fixed;
       bottom: 30px;
       left: 30px;
-      background: #ff69b4; /* hot pink */
+      background: #ff69b4;
       color: white;
       border: 2px solid white;
       padding: 15px 20px;
       font-size: 20px;
       border-radius: 10px;
-      z-index: 1100; /* higher than modal */
+      z-index: 1100;
     }
 
     /* Timeline page */
     #timelinePage {
       display: none;
       width: 100%;
-      min-height: 100vh; /* full height */
-      background-color: #ffb6c1; /* light pink background */
+      min-height: 100vh;
+      background-color: #ffb6c1;
       padding: 20px;
       box-sizing: border-box;
     }
@@ -130,18 +111,7 @@
       border-radius: 10px; 
       cursor: pointer; 
       margin-bottom: 10px; 
-    }
-
-    #timelineNextBtn {
-      display: inline-block;
-      margin-top: 20px;
-      font-size: 24px;
-      padding: 10px 20px;
-      background-color: #ff69b4;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
+      margin-right: 10px;
     }
   </style>
 </head>
@@ -156,10 +126,11 @@
 
   <div id="preGalleryMessage">&gt; </div>
 
-  <button id="nextBtn">Next</button>
-
   <!-- Gallery 1 -->
   <div id="gallery1" class="gallery"></div>
+
+  <!-- Gallery 2 -->
+  <div id="gallery2" class="gallery"></div>
 
   <!-- Black hi screen -->
   <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
@@ -168,11 +139,7 @@
   <div id="timelinePage">
     <h2>&gt; Our journey together</h2>
     <div id="timelineContainer"></div>
-    <button id="timelineNextBtn">Next</button>
   </div>
-
-  <!-- Gallery 2 -->
-  <div id="gallery2" class="gallery"></div>
 
   <!-- Modal -->
   <div id="modal"><img id="modalImg" src=""></div>
@@ -194,21 +161,21 @@
 
     const gallery2Images = [
       "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
-      "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg",
-      "5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"
+      "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg"
     ];
 
     const timelineImages = [
-      "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg"
+      "IMG_6276.jpg","IMG_5847.jpg"
     ];
 
     const imageMessages = {
       "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)",
       "IMG_5847.jpg": "our first adventure together"
-      // Add more messages as needed
     };
 
-    // --- Typing functions ---
+    const galleries = [gallery1Images, gallery2Images]; // match timeline index
+
+    // Typing functions
     function typeMessage(elementId, message, callback){
       let index=0;
       function t(){
@@ -232,7 +199,7 @@
       t();
     }
 
-    // --- Start first page typing ---
+    // Start typing
     function startTyping(){
       typeMessage("line1", firstMessage, ()=>{
         typeEllipsis("lineEllipsis1", ()=>{
@@ -246,7 +213,7 @@
     }
     window.onload=startTyping;
 
-    // --- Show timeline page ---
+    // Show timeline
     function showTimelinePage(){
       document.querySelectorAll('.line, .cursor').forEach(el=>el.style.display='none');
       document.body.style.backgroundColor="#ffb6c1";
@@ -255,112 +222,41 @@
       const container = document.getElementById("timelineContainer");
       timelinePage.style.display="block";
 
-      if(container.childElementCount===0){
-        timelineImages.forEach(filename=>{
-          const img=document.createElement("img");
-          img.src="images/"+filename;
-          img.onclick=()=>handleImageClick(filename,img.src);
-          container.appendChild(img);
-        });
-      }
-
-      document.getElementById("timelineNextBtn").onclick=()=>{
-        timelinePage.style.display="none";
-        showSecondPageMessage();
-      };
+      timelineImages.forEach((filename, index)=>{
+        const img = document.createElement("img");
+        img.src = "images/" + filename;
+        img.onclick = () => showGallery(index);
+        container.appendChild(img);
+      });
     }
 
-    // --- Show pink screen message "> my favorite photos ..." ---
-    function showSecondPageMessage(){
-      const msgEl = document.getElementById("preGalleryMessage");
-      msgEl.innerHTML="&gt; ";
-      msgEl.style.display="block";
+    // Show gallery by index
+    function showGallery(index){
+      document.getElementById("timelinePage").style.display="none";
+      const galleryDiv = index===0 ? document.getElementById("gallery1") : document.getElementById("gallery2");
+      const images = galleries[index];
 
-      const message="my favorite photos (solo shots first)";
-      let index=0;
-      function typeChar(){
-        if(index<message.length){ 
-          msgEl.innerHTML+=message[index++]; 
-          setTimeout(typeChar,speed);
-        } else {
-          typeEllipsis("preGalleryMessage", showGallery1);
-        }
-      }
-      typeChar();
+      galleryDiv.innerHTML = ""; // clear previous
+      galleryDiv.style.display="block";
+
+      images.forEach(filename=>{
+        const img = document.createElement("img");
+        img.src = "images/" + filename;
+        img.onclick = () => handleImageClick(filename, img.src);
+        galleryDiv.appendChild(img);
+      });
     }
 
-    // --- Show gallery 1 ---
-    function showGallery1(){
-      const gallery1 = document.getElementById("gallery1");
-      gallery1.style.display="block";
-
-      const nextBtn = document.getElementById("nextBtn");
-      nextBtn.style.display="block";
-
-      if(gallery1.childElementCount===0){
-        gallery1Images.forEach(filename=>{
-          const img=document.createElement("img");
-          img.src="images/"+filename;
-          img.alt="Us";
-          img.onclick=()=>handleImageClick(filename,img.src);
-          gallery1.appendChild(img);
-        });
-      }
-
-      nextBtn.onclick = showHiPage;
-    }
-
-    // --- Black hi screen ---
-    function showHiPage(){
-      document.getElementById("gallery1").style.display="none";
-      document.getElementById("preGalleryMessage").style.display="none";
-      document.getElementById("nextBtn").style.display="none";
-
-      const hiPage = document.getElementById("hiPage");
-      const hiText = document.getElementById("hiText");
-      hiPage.style.display="block";
-
-      let index = 0;
-      const message = "hi";
-
-      function typeHi(){
-        if(index<message.length){ 
-          hiText.innerHTML+=message[index++]; 
-          setTimeout(typeHi,speed); 
-        } else showGallery2();
-      }
-      hiText.innerHTML="";
-      typeHi();
-    }
-
-    // --- Gallery 2 ---
-    function showGallery2(){
-      const gallery2 = document.getElementById("gallery2");
-      gallery2.style.display="block";
-
-      if(gallery2.childElementCount===0){
-        gallery2Images.forEach(filename=>{
-          const img=document.createElement("img");
-          img.src="images/"+filename;
-          img.alt="Us";
-          img.onclick=()=>handleImageClick(filename,img.src);
-          gallery2.appendChild(img);
-        });
-      }
-    }
-
-    // --- Image click popup ---
-    function handleImageClick(filename,src){
+    // Handle modal and popup
+    function handleImageClick(filename, src){
       const modal = document.getElementById("modal");
       const modalImg = document.getElementById("modalImg");
       modalImg.src = src;
       modal.style.display = "flex";
 
-      // Only show popup if there's a message for this image
       if(imageMessages[filename]) showPopupMessage(imageMessages[filename]);
     }
 
-    // --- Popup message typing ---
     function showPopupMessage(text){
       const popup = document.getElementById("popupText");
       const popupMessage = document.getElementById("popupMessage");
@@ -377,11 +273,9 @@
       setTimeout(()=>{ popup.style.display="none"; }, 4000);
     }
 
-    // --- Close modal on click ---
     document.getElementById("modal").addEventListener("click", ()=>{
       document.getElementById("modal").style.display="none";
     });
   </script>
-
 </body>
 </html>
