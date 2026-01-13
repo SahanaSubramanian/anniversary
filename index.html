@@ -2,77 +2,151 @@
 <html>
 <head>
   <title>❤️</title>
+
   <style>
     body {
-      font-family: "Courier New", monospace;
+      font-family: "Courier New", Courier, monospace;
       background-color: #000;
       color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
       padding: 20px;
       font-size: 32px;
+      text-align: left;
       overflow: auto;
       transition: background-color 0.5s ease;
       position: relative;
     }
 
-    .line { display:block; }
+    .line { display: block; }
 
     .cursor {
-      display:inline-block;
-      width:10px;
-      background:white;
-      margin-left:2px;
+      display: inline-block;
+      width: 10px;
+      background-color: #ffffff;
+      margin-left: 2px;
       animation: blink 1s step-start infinite;
     }
-    @keyframes blink { 50% { background: transparent; } }
 
-    .gallery { display:none; width:100%; column-count:4; column-gap:20px; margin-top:20px; }
-    .gallery img { width:100%; height:auto; margin-bottom:20px; border:3px solid #fff; border-radius:10px; cursor:pointer; }
+    @keyframes blink { 50% { background-color: transparent; } }
 
-    #nextBtn, #backBtn, #timelineNextBtn {
-      display:none;
+    #preGalleryMessage {
+      display: none;
+      font-size: 36px;
+      color: #fff;
+      margin-top: 20px;
+    }
+
+    .gallery {
+      display: none;
+      width: 100%;
+      column-count: 4;
+      column-gap: 20px;
+      margin-top: 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: auto;
+      margin-bottom: 20px;
+      border: 3px solid #fff;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #nextBtn {
+      display: none;
       position: fixed;
       top: 20px;
-      padding:10px 20px;
-      font-size:24px;
-      border:none;
-      border-radius:10px;
-      color:white;
-      cursor:pointer;
-      z-index:100;
+      right: 20px;
+      font-size: 24px;
+      padding: 10px 20px;
+      background-color: #ff69b4;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      z-index: 100;
     }
-    #nextBtn, #timelineNextBtn { right:20px; background:#ff69b4; }
-    #backBtn { left:20px; background:#555; }
+
+    @media (max-width: 1200px) { .gallery { column-count: 3; } }
+    @media (max-width: 800px) { .gallery { column-count: 2; } }
+    @media (max-width: 500px) { .gallery { column-count: 1; } }
 
     #modal {
-      display:none;
-      position:fixed;
-      inset:0;
-      background:rgba(255,105,180,0.9); /* hot pink */
-      justify-content:center;
-      align-items:center;
-      z-index:1000;
-      color:white;
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-    #modal img { max-width:90%; max-height:90%; border:5px solid white; border-radius:10px; }
+
+    #modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border: 5px solid #fff;
+      border-radius: 10px;
+    }
+
+    #hiPage {
+      display: none;
+      margin-top: 20px;
+      font-size: 48px;
+    }
+    #popupText {
+  display: none;
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  background: #ff69b4; /* hot pink */
+  color: white;        /* white text */
+  border: 2px solid white;
+  padding: 15px 20px;
+  font-size: 20px;
+  border-radius: 10px;
+}
 
     #popupText {
       display:none;
       position:fixed;
       bottom:30px;
       left:30px;
-      background:#ff1493; /* deep pink */
+      background:black;
       border:2px solid white;
       padding:15px 20px;
       font-size:20px;
-      color:white;
-      z-index:1010;
     }
 
-    #preGalleryMessage, #hiPage, #timelinePage { display:none; }
-    #hiPage { font-size:48px; margin-top:20px; }
+    #popupText {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: #ff69b4; /* hot pink */
+      color: white;
+      border: 2px solid white;
+      padding: 15px 20px;
+      font-size: 20px;
+      border-radius: 10px;
+      z-index: 1100; /* higher than modal */
+    }
+
+
+    /* Timeline page */
+    #timelinePage {
+      display:none;
+      margin-top:20px;
+    }
+    #timelinePage h2 { font-size:36px; }
     #timelineContainer img { width:200px; border:3px solid white; border-radius:10px; cursor:pointer; margin-bottom:10px; }
   </style>
 </head>
+
 <body>
 
   <!-- Terminal typing first page -->
@@ -85,7 +159,6 @@
   <div id="preGalleryMessage">&gt; </div>
 
   <button id="nextBtn">Next</button>
-  <button id="backBtn">Back</button>
 
   <!-- Gallery 1 -->
   <div id="gallery1" class="gallery"></div>
@@ -104,7 +177,7 @@
   <div id="gallery2" class="gallery"></div>
 
   <!-- Modal -->
-  <div id="modal"><img id="modalImg"></div>
+  <div id="modal"><img id="modalImg" src=""></div>
 
   <!-- Popup text for image messages -->
   <div id="popupText">&gt; <span id="popupMessage"></span><span class="cursor"></span></div>
@@ -112,172 +185,184 @@
 <script>
 const speed = 100;
 
-// Messages
 const firstMessage = "hi aarjav!!";
 const secondMessage = "happy anniversary ♥";
 const thirdMessage = "thank you for the best year :)";
 
-// Images
-const gallery1Images = ["lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"];
-const gallery2Images = ["IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg","IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg","5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"];
-const timelineImages = ["IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg"];
+const gallery1Images = [
+  "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg",
+  "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
+];
 
-// Image messages
-const imageMessages = { "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)" };
+const gallery2Images = [
+  "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
+  "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg",
+  "5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"
+];
 
-// History stack
-let pageHistory = [];
-let currentPage = null;
+const timelineImages = [
+  "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg"
+];
 
-// Typing functions
-function typeMessage(elId,msg,cb){
-  let i=0;
-  function t(){ if(i<msg.length){ document.getElementById(elId).innerHTML+=msg[i++]; setTimeout(t,speed); } else if(cb) cb(); }
-  t();
-}
-
-function typeEllipsis(elId,cb){
-  const ellipsis = "...";
-  let i=0;
-  function t(){ if(i<ellipsis.length){ document.getElementById(elId).innerHTML+=ellipsis[i++]; setTimeout(t,speed); } else if(cb) setTimeout(cb,300); }
-  t();
-}
-
-// Navigate to a page
-function navigateToPage(func,pageName){
-  if(currentPage) pageHistory.push(currentPage);
-  currentPage = pageName;
-  func();
-}
-
-// Back button
-backBtn.onclick = ()=>{
-  if(pageHistory.length>0){
-    const prev = pageHistory.pop();
-    currentPage = null; // temporarily
-    prevPage(prev);
-  }
+const imageMessages = {
+  "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)"
 };
 
-// Show previous page
-function prevPage(pageName){
-  hideAllPages();
-  switch(pageName){
-    case "firstTyping": navigateToPage(startTyping,"firstTyping"); break;
-    case "secondMessage": navigateToPage(showSecondPageMessage,"secondMessage"); break;
-    case "gallery1": navigateToPage(showGallery1,"gallery1"); break;
-    case "hiPage": navigateToPage(showHiPage,"hiPage"); break;
-    case "timelinePage": navigateToPage(showTimelinePage,"timelinePage"); break;
-    case "gallery2": navigateToPage(showGallery2,"gallery2"); break;
+// --- Typing functions ---
+function typeMessage(elementId, message, callback){
+  let index=0;
+  function t(){
+    if(index<message.length){ document.getElementById(elementId).innerHTML+=message[index++]; setTimeout(t,speed);}
+    else if(callback) callback();
   }
+  t();
 }
 
-// Hide all pages
-function hideAllPages(){
-  document.querySelectorAll('.line, .cursor, #preGalleryMessage, #gallery1, #gallery2, #hiPage, #timelinePage').forEach(el=>el.style.display='none');
-  nextBtn.style.display = backBtn.style.display = timelineNextBtn.style.display = false;
+function typeEllipsis(elementId, callback){
+  const ellipsis = "...";
+  let index=0;
+  function t(){
+    if(index<ellipsis.length){ document.getElementById(elementId).innerHTML+=ellipsis[index++]; setTimeout(t,speed);}
+    else if(callback) setTimeout(callback,300);
+  }
+  t();
 }
 
 // --- Start first page typing ---
 function startTyping(){
-  hideAllPages();
-  document.querySelectorAll('.line').forEach(el=>el.innerHTML="");
-  line1.style.display=line2.style.display=line3.style.display=lineEllipsis1.style.display=lineEllipsis2.style.display='block';
-  document.querySelectorAll('.cursor').forEach(el=>el.style.display='inline-block');
-  typeMessage("line1",firstMessage,()=>typeEllipsis("lineEllipsis1",()=>typeMessage("line2",secondMessage,()=>typeEllipsis("lineEllipsis2",()=>typeMessage("line3",thirdMessage,()=>navigateToPage(showSecondPageMessage,"secondMessage"))))));
+  typeMessage("line1", firstMessage, ()=>{
+    typeEllipsis("lineEllipsis1", ()=>{
+      typeMessage("line2", secondMessage, ()=>{
+        typeEllipsis("lineEllipsis2", ()=>{
+          typeMessage("line3", thirdMessage, showSecondPageMessage);
+        });
+      });
+    });
+  });
 }
+window.onload=startTyping;
 
-// --- Show second pink message ---
+// --- Show pink screen message ---
 function showSecondPageMessage(){
-  hideAllPages();
+  document.querySelectorAll('.line, .cursor').forEach(el=>el.style.display='none');
   document.body.style.backgroundColor="#ffb6c1";
-  preGalleryMessage.style.display="block";
-  preGalleryMessage.innerHTML="&gt; ";
-  let i=0;
-  const msg="my favorite photos (solo shots first)";
-  function typeChar(){ if(i<msg.length){ preGalleryMessage.innerHTML+=msg[i++]; setTimeout(typeChar,speed); } else typeEllipsis("preGalleryMessage",()=>navigateToPage(showGallery1,"gallery1")); }
+  const msgEl = document.getElementById("preGalleryMessage");
+  msgEl.innerHTML="&gt; ";
+  const message="my favorite photos (solo shots first)";
+  let index=0;
+  function typeChar(){
+    if(index<message.length){ msgEl.innerHTML+=message[index++]; setTimeout(typeChar,speed);}
+    else typeEllipsis("preGalleryMessage", showGallery1);
+  }
+  msgEl.style.display="block";
   typeChar();
 }
 
 // --- Show gallery 1 ---
 function showGallery1(){
-  hideAllPages();
+  const gallery1 = document.getElementById("gallery1");
   gallery1.style.display="block";
-  nextBtn.style.display = backBtn.style.display = true;
-  gallery1Images.forEach(fn=>{
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.style.display="block";
+
+  gallery1Images.forEach(filename=>{
     const img=document.createElement("img");
-    img.src="images/"+fn; img.alt="Us";
-    img.onclick=()=>handleImageClick(fn,img.src);
+    img.src="images/"+filename;
+    img.alt="Us";
+    img.onclick=()=>handleImageClick(filename,img.src);
     gallery1.appendChild(img);
   });
-  nextBtn.onclick = ()=>navigateToPage(showHiPage,"hiPage");
+
+  nextBtn.onclick = showHiPage;
 }
 
 // --- Black hi screen ---
 function showHiPage(){
-  hideAllPages();
+  document.getElementById("gallery1").style.display="none";
+  document.getElementById("preGalleryMessage").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+
+  const hiPage = document.getElementById("hiPage");
+  const hiText = document.getElementById("hiText");
   hiPage.style.display="block";
-  backBtn.style.display=true;
-  let i=0; const msg="hi"; hiText.innerHTML="";
-  function typeHi(){ if(i<msg.length){ hiText.innerHTML+=msg[i++]; setTimeout(typeHi,speed); } else navigateToPage(showTimelinePage,"timelinePage"); }
+
+  let index = 0;
+  const message = "hi";
+
+  function typeHi(){
+    if(index<message.length){ hiText.innerHTML+=message[index++]; setTimeout(typeHi,speed); }
+    else showTimelinePage();
+  }
+  hiText.innerHTML="";
   typeHi();
 }
 
-// --- Timeline ---
+// --- Timeline page ---
 function showTimelinePage(){
-  hideAllPages();
+  document.getElementById("hiPage").style.display="none";
+  const timelinePage = document.getElementById("timelinePage");
+  const container = document.getElementById("timelineContainer");
   timelinePage.style.display="block";
-  backBtn.style.display=timelineNextBtn.style.display=true;
-  const container=timelineContainer;
+
   if(container.childElementCount===0){
-    timelineImages.forEach(fn=>{
+    timelineImages.forEach(filename=>{
       const img=document.createElement("img");
-      img.src="images/"+fn;
-      img.onclick=()=>handleImageClick(fn,img.src);
+      img.src="images/"+filename;
+      img.onclick=()=>handleImageClick(filename,img.src);
       container.appendChild(img);
     });
   }
-  timelineNextBtn.onclick = ()=>navigateToPage(showGallery2,"gallery2");
+
+  document.getElementById("timelineNextBtn").onclick=()=>{
+    timelinePage.style.display="none";
+    showGallery2();
+  };
 }
 
 // --- Gallery 2 ---
 function showGallery2(){
-  hideAllPages();
+  const gallery2 = document.getElementById("gallery2");
   gallery2.style.display="block";
-  backBtn.style.display=true;
+
   if(gallery2.childElementCount===0){
-    gallery2Images.forEach(fn=>{
+    gallery2Images.forEach(filename=>{
       const img=document.createElement("img");
-      img.src="images/"+fn;
+      img.src="images/"+filename;
       img.alt="Us";
-      img.onclick=()=>handleImageClick(fn,img.src);
-    gallery2.appendChild(img);
+      img.onclick=()=>handleImageClick(filename,img.src);
+      gallery2.appendChild(img);
     });
   }
 }
 
 // --- Image click popup ---
-function handleImageClick(fn,src){
-  modalImg.src=src;
-  modal.style.display="flex";
-  if(imageMessages[fn]) showPopupMessage(imageMessages[fn]);
+function handleImageClick(filename,src){
+  const modal = document.getElementById("modal");
+  const modalImg = document.getElementById("modalImg");
+  modalImg.src = src;
+  modal.style.display = "flex";
+
+  if(imageMessages[filename]) showPopupMessage(imageMessages[filename]);
 }
 
-// --- Popup typing ---
-function showPopupMessage(txt){
-  popupText.style.display="block";
+// --- Popup message typing ---
+function showPopupMessage(text){
+  const popup = document.getElementById("popupText");
+  const popupMessage = document.getElementById("popupMessage");
+  popup.style.display="block";
   popupMessage.innerHTML="";
   let i=0;
-  function t(){ if(i<txt.length){ popupMessage.innerHTML+=txt[i++]; setTimeout(t,60); } }
+  function t(){
+    if(i<text.length){ popupMessage.innerHTML+=text[i++]; setTimeout(t,60);}
+  }
   t();
-  setTimeout(()=>{ popupText.style.display="none"; },4000);
+  setTimeout(()=>{ popup.style.display="none"; },4000);
 }
 
 // --- Close modal ---
-modal.onclick=()=>modal.style.display='none';
-
-// Start
-window.onload=()=>navigateToPage(startTyping,"firstTyping");
+document.getElementById("modal").addEventListener("click",()=>{
+  document.getElementById("modal").style.display="none";
+});
 </script>
 </body>
 </html>
