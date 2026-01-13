@@ -278,7 +278,9 @@
       modalImg.src = src;
       modal.style.display = "flex";
 
-      if(imageMessages[filename]) showPopupMessage(imageMessages[filename]);
+      // FIX: normalize filename to ensure popup works
+      const name = src.split("/").pop().trim(); // get the file name only
+      if(imageMessages[name]) showPopupMessage(imageMessages[name]);
     }
 
     function showPopupMessage(text){
