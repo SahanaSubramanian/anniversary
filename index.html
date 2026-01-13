@@ -20,7 +20,6 @@
     }
 
     .line { display: block; }
-
     .cursor {
       display: inline-block;
       width: 10px;
@@ -28,7 +27,6 @@
       margin-left: 2px;
       animation: blink 1s step-start infinite;
     }
-
     @keyframes blink { 50% { background-color: transparent; } }
 
     #preGalleryMessage {
@@ -45,7 +43,6 @@
       column-gap: 20px;
       margin-top: 20px;
     }
-
     .gallery img {
       width: 100%;
       height: auto;
@@ -55,7 +52,7 @@
       cursor: pointer;
     }
 
-    #nextBtn {
+    button.nextBtn {
       display: none;
       position: fixed;
       top: 20px;
@@ -84,7 +81,6 @@
       align-items: center;
       z-index: 1000;
     }
-
     #modal img {
       max-width: 90%;
       max-height: 90%;
@@ -116,11 +112,11 @@
     #timelinePage {
       display:none;
       margin-top:20px;
-      background:black;
       width:100%;
       flex-direction: column;
       align-items: flex-start;
       padding: 20px;
+      background-color: #ffb6c1; /* light pink */
     }
     #timelinePage h2 { font-size:36px; margin-bottom:20px; }
     #timelineContainer img { width:200px; border:3px solid white; border-radius:10px; cursor:pointer; margin-bottom:10px; }
@@ -137,20 +133,17 @@
 
   <div id="preGalleryMessage">&gt; </div>
 
-  <!-- Timeline Next button -->
-  <button id="nextBtn">Next</button>
-
   <!-- Timeline page -->
   <div id="timelinePage">
     <h2>&gt; Our journey together</h2>
     <div id="timelineContainer"></div>
-    <button id="timelineNextBtn">Next</button>
+    <button id="timelineNextBtn" class="nextBtn">Next</button>
   </div>
 
   <!-- Gallery 1 -->
   <div id="gallery1" class="gallery"></div>
 
-  <!-- Black hi screen -->
+  <!-- Pink "my favorite photos..." screen -->
   <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
 
   <!-- Gallery 2 -->
@@ -173,9 +166,7 @@ const timelineImages = ["IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg"];
 const gallery1Images = ["lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"];
 const gallery2Images = ["IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg","IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg","5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"];
 
-const imageMessages = {
-  "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)"
-};
+const imageMessages = { "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)" };
 
 // --- Typing functions ---
 function typeMessage(elementId, message, callback){
@@ -222,22 +213,26 @@ function showTimelinePage(){
 
   const timelineNextBtn = document.getElementById("timelineNextBtn");
   timelineNextBtn.style.display = "block";
-  timelineNextBtn.style.backgroundColor = "#ff69b4";
-  timelineNextBtn.style.color = "white";
-  timelineNextBtn.style.position = "fixed";
-  timelineNextBtn.style.top = "20px";
-  timelineNextBtn.style.right = "20px";
-  timelineNextBtn.style.fontSize = "24px";
-  timelineNextBtn.style.padding = "10px 20px";
-  timelineNextBtn.style.border = "none";
-  timelineNextBtn.style.borderRadius = "10px";
-  timelineNextBtn.style.cursor = "pointer";
-  timelineNextBtn.style.zIndex = 100;
-
   timelineNextBtn.onclick = () => {
     timelinePage.style.display = "none";
-    showGallery1();
+    showPinkScreen();
   };
+}
+
+// --- Pink "my favorite photos first" screen ---
+function showPinkScreen(){
+  document.body.style.backgroundColor = "#ffb6c1";
+  const hiPage = document.getElementById("hiPage");
+  hiPage.style.display = "block";
+  const hiText = document.getElementById("hiText");
+  hiText.innerHTML = "&gt; ";
+  const message = "my favorite photos (solo shots first)";
+  let index = 0;
+  function typeHi(){
+    if(index<message.length){ hiText.innerHTML += message[index++]; setTimeout(typeHi, speed);}
+    else showGallery1();
+  }
+  typeHi();
 }
 
 // --- Show Gallery 1 ---
@@ -251,39 +246,28 @@ function showGallery1(){
     img.onclick=()=>handleImageClick(fn,img.src);
     gallery1.appendChild(img);
   });
+
+  // Show Next button to go to Gallery 2
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.style.display="block";
+  nextBtn.onclick = showGallery2;
 }
 
 // --- Show Gallery 2 ---
 function showGallery2(){
+  document.getElementById("gallery1").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
   const gallery2 = document.getElementById("gallery2");
   gallery2.style.display="block";
 
   if(gallery2.childElementCount===0){
     gallery2Images.forEach(fn=>{
-      const img=document.createElement("img");
+      const img = document.createElement("img");
       img.src = "images/"+fn;
-      img.onclick=()=>handleImageClick(fn,img.src);
+      img.onclick = () => handleImageClick(fn,img.src);
       gallery2.appendChild(img);
     });
   }
-}
-
-// --- Black hi screen ---
-function showHiPage(){
-  document.getElementById("gallery1").style.display="none";
-  const hiPage = document.getElementById("hiPage");
-  const hiText = document.getElementById("hiText");
-  hiPage.style.display="block";
-
-  let index=0;
-  const message="hi";
-
-  function typeHi(){
-    if(index<message.length){ hiText.innerHTML+=message[index++]; setTimeout(typeHi,speed);}
-    else showGallery2();
-  }
-  hiText.innerHTML="";
-  typeHi();
 }
 
 // --- Image click popup ---
