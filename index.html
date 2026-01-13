@@ -99,6 +99,20 @@
       margin-top: 20px;
       font-size: 48px;
     }
+
+    /* Popup for special image */
+    #popupText {
+      display: none;
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      background: black;
+      border: 2px solid white;
+      padding: 15px 20px;
+      font-size: 20px;
+      color: white;
+      z-index: 2000;
+    }
   </style>
 </head>
 
@@ -128,6 +142,9 @@
   <div id="modal">
     <img id="modalImg" src="">
   </div>
+
+  <!-- Popup text for special image -->
+  <div id="popupText">&gt; <span id="popupMessage"></span><span class="cursor"></span></div>
 
   <script>
     const speed = 100;
@@ -228,6 +245,11 @@
           const modalImg = document.getElementById("modalImg");
           modalImg.src = img.src;
           modal.style.display = "flex";
+
+          // Show special popup for IMG_6273.jpg
+          if (filename === "IMG_6273.jpg") {
+            showPopupMessage("birthday boy (a date fully planned by me btw)");
+          }
         });
 
         gallery1.appendChild(img);
@@ -282,6 +304,24 @@
           gallery2.appendChild(img);
         });
       }
+    }
+
+    function showPopupMessage(text) {
+      const popup = document.getElementById("popupText");
+      const popupMessage = document.getElementById("popupMessage");
+      popup.style.display = "block";
+      popupMessage.innerHTML = "";
+      let i = 0;
+
+      function typeChar() {
+        if (i < text.length) {
+          popupMessage.innerHTML += text[i++];
+          setTimeout(typeChar, 60);
+        }
+      }
+
+      typeChar();
+      setTimeout(() => { popup.style.display = "none"; }, 4000);
     }
 
     document.getElementById("modal").addEventListener("click", () => {
