@@ -56,11 +56,9 @@
       cursor: pointer;
     }
 
-    #nextBtn {
+    #nextBtn, #timelineNextBtn, #backBtn {
       display: none;
       position: fixed;
-      top: 20px;
-      right: 20px;
       font-size: 24px;
       padding: 10px 20px;
       background-color: #ff69b4;
@@ -68,8 +66,12 @@
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      z-index: 100;
+      z-index: 1100;
     }
+
+    #nextBtn { top: 20px; right: 20px; }
+    #timelineNextBtn { top: 20px; right: 20px; }
+    #backBtn { top: 20px; left: 20px; }
 
     @media (max-width: 1200px) { .gallery { column-count: 3; } }
     @media (max-width: 800px) { .gallery { column-count: 2; } }
@@ -93,35 +95,24 @@
       border-radius: 10px;
     }
 
-    #hiPage {
-      display: none;
-      margin-top: 20px;
-      font-size: 48px;
-    }
-
+    #hiPage { display: none; margin-top: 20px; font-size: 48px; }
+    #timelinePage { display: none; margin-top: 20px; }
+    #timelinePage h2 { font-size: 36px; }
+    #timelineContainer img { width: 200px; border: 3px solid white; border-radius: 10px; cursor: pointer; margin-bottom: 10px; }
 
     #popupText {
       display: none;
       position: fixed;
       bottom: 30px;
       left: 30px;
-      background: #ff69b4; /* hot pink */
+      background: #ff69b4;
       color: white;
       border: 2px solid white;
       padding: 15px 20px;
       font-size: 20px;
       border-radius: 10px;
-      z-index: 1100; /* higher than modal */
+      z-index: 1200;
     }
-
-
-    /* Timeline page */
-    #timelinePage {
-      display:none;
-      margin-top:20px;
-    }
-    #timelinePage h2 { font-size:36px; }
-    #timelineContainer img { width:200px; border:3px solid white; border-radius:10px; cursor:pointer; margin-bottom:10px; }
   </style>
 </head>
 
@@ -136,7 +127,10 @@
 
   <div id="preGalleryMessage">&gt; </div>
 
+  <!-- Buttons -->
   <button id="nextBtn">Next</button>
+  <button id="timelineNextBtn">Next</button>
+  <button id="backBtn">Back</button>
 
   <!-- Gallery 1 -->
   <div id="gallery1" class="gallery"></div>
@@ -148,7 +142,6 @@
   <div id="timelinePage">
     <h2>&gt; Our journey together</h2>
     <div id="timelineContainer"></div>
-    <button id="timelineNextBtn">Next</button>
   </div>
 
   <!-- Gallery 2 -->
@@ -157,7 +150,7 @@
   <!-- Modal -->
   <div id="modal"><img id="modalImg" src=""></div>
 
-  <!-- Popup text for image messages -->
+  <!-- Popup text -->
   <div id="popupText">&gt; <span id="popupMessage"></span><span class="cursor"></span></div>
 
 <script>
@@ -185,6 +178,9 @@ const timelineImages = [
 const imageMessages = {
   "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)"
 };
+
+let currentPage = "firstTyping";
+let previousPage = null;
 
 // --- Typing functions ---
 function typeMessage(elementId, message, callback){
@@ -238,10 +234,14 @@ function showSecondPageMessage(){
 
 // --- Show gallery 1 ---
 function showGallery1(){
+  previousPage = "preGalleryMessage";
+  currentPage = "gallery1";
+
   const gallery1 = document.getElementById("gallery1");
   gallery1.style.display="block";
   const nextBtn = document.getElementById("nextBtn");
   nextBtn.style.display="block";
+  document.getElementById("backBtn").style.display = "block";
 
   gallery1Images.forEach(filename=>{
     const img=document.createElement("img");
@@ -256,9 +256,13 @@ function showGallery1(){
 
 // --- Black hi screen ---
 function showHiPage(){
+  previousPage = currentPage;
+  currentPage = "hiPage";
+
   document.getElementById("gallery1").style.display="none";
   document.getElementById("preGalleryMessage").style.display="none";
   document.getElementById("nextBtn").style.display="none";
+  document.getElementById("backBtn").style.display = "block";
 
   const hiPage = document.getElementById("hiPage");
   const hiText = document.getElementById("hiText");
@@ -277,10 +281,15 @@ function showHiPage(){
 
 // --- Timeline page ---
 function showTimelinePage(){
+  previousPage = currentPage;
+  currentPage = "timelinePage";
+
   document.getElementById("hiPage").style.display="none";
   const timelinePage = document.getElementById("timelinePage");
   const container = document.getElementById("timelineContainer");
   timelinePage.style.display="block";
+  document.getElementById("timelineNextBtn").style.display="block";
+  document.getElementById("backBtn").style.display="block";
 
   if(container.childElementCount===0){
     timelineImages.forEach(filename=>{
@@ -299,8 +308,12 @@ function showTimelinePage(){
 
 // --- Gallery 2 ---
 function showGallery2(){
+  previousPage = currentPage;
+  currentPage = "gallery2";
+
   const gallery2 = document.getElementById("gallery2");
   gallery2.style.display="block";
+  document.getElementById("backBtn").style.display="block";
 
   if(gallery2.childElementCount===0){
     gallery2Images.forEach(filename=>{
@@ -341,6 +354,27 @@ function showPopupMessage(text){
 document.getElementById("modal").addEventListener("click",()=>{
   document.getElementById("modal").style.display="none";
 });
+
+// --- Back button ---
+document.getElementById("backBtn").onclick = () => {
+  if(!previousPage) return;
+
+  // Hide current page
+  if(currentPage === "gallery1") gallery1.style.display="none";
+  if(currentPage === "hiPage") hiPage.style.display="none";
+  if(currentPage === "timelinePage") timelinePage.style.display="none";
+  if(currentPage === "gallery2") gallery2.style.display="none";
+
+  // Show previous page
+  if(previousPage === "gallery1") gallery1.style.display="block";
+  if(previousPage === "hiPage") hiPage.style.display="block";
+  if(previousPage === "timelinePage") timelinePage.style.display="block";
+  if(previousPage === "gallery2") gallery2.style.display="block";
+
+  currentPage = previousPage;
+  previousPage = null;
+  document.getElementById("backBtn").style.display = "none";
+};
 </script>
 </body>
 </html>
