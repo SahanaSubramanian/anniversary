@@ -5,7 +5,7 @@
 
   <style>
     body {
-      font-family: "Courier New", monospace;
+      font-family: "Courier New", Courier, monospace;
       background-color: #000;
       color: #fff;
       display: flex;
@@ -56,14 +56,14 @@
       cursor: pointer;
     }
 
-    #nextBtn {
+    #nextBtn, #timelineNextBtn {
       display: none;
       position: fixed;
       top: 20px;
       right: 20px;
       font-size: 24px;
       padding: 10px 20px;
-      background-color: #ff69b4;
+      background-color: #ff69b4; /* hot pink */
       color: #fff;
       border: none;
       border-radius: 10px;
@@ -110,31 +110,19 @@
       padding: 15px 20px;
       font-size: 20px;
       border-radius: 10px;
-      z-index: 1100; /* higher than modal */
+      z-index: 2000; /* in front of modal */
     }
 
     /* Timeline page */
     #timelinePage {
-      display: none;
-      width: 100%;
-      min-height: 100vh; /* full height */
+      display:none;
+      margin-top:20px;
+      width:100%;
+      min-height:100vh; /* full height */
       background-color: #ffb6c1; /* light pink background */
-      padding: 20px;
-      box-sizing: border-box;
     }
-    #timelinePage h2 { font-size: 36px; }
-    #timelineContainer img { width: 200px; border: 3px solid white; border-radius: 10px; cursor: pointer; margin-bottom: 10px; }
-    #timelineNextBtn {
-      display: inline-block;
-      margin-top: 20px;
-      font-size: 24px;
-      padding: 10px 20px;
-      background-color: #ff69b4;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
+    #timelinePage h2 { font-size:36px; }
+    #timelineContainer img { width:200px; border:3px solid white; border-radius:10px; cursor:pointer; margin-bottom:10px; }
   </style>
 </head>
 
@@ -170,190 +158,180 @@
   <!-- Modal -->
   <div id="modal"><img id="modalImg" src=""></div>
 
-  <script>
-    const speed = 100;
+  <!-- Popup text for image messages -->
+  <div id="popupText">&gt; <span id="popupMessage"></span><span class="cursor"></span></div>
 
-    const firstMessage = "hi aarjav!!";
-    const secondMessage = "happy anniversary ♥";
-    const thirdMessage = "thank you for the best year :)";
+<script>
+const speed = 100;
 
-    const gallery1Images = [
-      "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg",
-      "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
-    ];
+const firstMessage = "hi aarjav!!";
+const secondMessage = "happy anniversary ♥";
+const thirdMessage = "thank you for the best year :)";
 
-    const gallery2Images = [
-      "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
-      "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg",
-      "5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"
-    ];
+const gallery1Images = [
+  "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg",
+  "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
+];
 
-    const timelineImages = [
-      "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg"
-    ];
+const gallery2Images = [
+  "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
+  "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg",
+  "5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"
+];
 
-    const imageMessages = {
-      "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)"
-    };
+const timelineImages = [
+  "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg"
+];
 
-    // --- Typing functions ---
-    function typeMessage(elementId, message, callback){
-      let index=0;
-      function t(){
-        if(index<message.length){ document.getElementById(elementId).innerHTML+=message[index++]; setTimeout(t,speed);}
-        else if(callback) callback();
-      }
-      t();
-    }
+const imageMessages = {
+  "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)"
+};
 
-    function typeEllipsis(elementId, callback){
-      const ellipsis = "...";
-      let index=0;
-      function t(){
-        if(index<ellipsis.length){ document.getElementById(elementId).innerHTML+=ellipsis[index++]; setTimeout(t,speed);}
-        else if(callback) setTimeout(callback,300);
-      }
-      t();
-    }
+// --- Typing functions ---
+function typeMessage(elementId, message, callback){
+  let index=0;
+  function t(){
+    if(index<message.length){ document.getElementById(elementId).innerHTML+=message[index++]; setTimeout(t,speed);}
+    else if(callback) callback();
+  }
+  t();
+}
 
-    // --- Start first page typing ---
-    function startTyping(){
-      typeMessage("line1", firstMessage, ()=>{
-        typeEllipsis("lineEllipsis1", ()=>{
-          typeMessage("line2", secondMessage, ()=>{
-            typeEllipsis("lineEllipsis2", ()=>{
-              typeMessage("line3", thirdMessage, showTimelinePage);
-            });
-          });
+function typeEllipsis(elementId, callback){
+  const ellipsis = "...";
+  let index=0;
+  function t(){
+    if(index<ellipsis.length){ document.getElementById(elementId).innerHTML+=ellipsis[index++]; setTimeout(t,speed);}
+    else if(callback) setTimeout(callback,300);
+  }
+  t();
+}
+
+// --- Start first page typing ---
+function startTyping(){
+  typeMessage("line1", firstMessage, ()=>{
+    typeEllipsis("lineEllipsis1", ()=>{
+      typeMessage("line2", secondMessage, ()=>{
+        typeEllipsis("lineEllipsis2", ()=>{
+          typeMessage("line3", thirdMessage, showTimelinePage);
         });
       });
-    }
-    window.onload=startTyping;
-
-    // --- Show timeline page ---
-    function showTimelinePage(){
-      document.querySelectorAll('.line, .cursor').forEach(el=>el.style.display='none');
-      document.body.style.backgroundColor="#ffb6c1";
-
-      const timelinePage = document.getElementById("timelinePage");
-      const container = document.getElementById("timelineContainer");
-      timelinePage.style.display="block";
-
-      if(container.childElementCount===0){
-        timelineImages.forEach(filename=>{
-          const img=document.createElement("img");
-          img.src="images/"+filename;
-          img.onclick=()=>handleImageClick(filename,img.src);
-          container.appendChild(img);
-        });
-      }
-
-      document.getElementById("timelineNextBtn").onclick=()=>{
-        timelinePage.style.display="none";
-        showSecondPageMessage();
-      };
-    }
-
-    // --- Show pink screen message "> my favorite photos ..." ---
-    function showSecondPageMessage(){
-      const msgEl = document.getElementById("preGalleryMessage");
-      msgEl.innerHTML="&gt; ";
-      msgEl.style.display="block";
-
-      const message="my favorite photos (solo shots first)";
-      let index=0;
-      function typeChar(){
-        if(index<message.length){ msgEl.innerHTML+=message[index++]; setTimeout(typeChar,speed);}
-        else typeEllipsis("preGalleryMessage", showGallery1);
-      }
-      typeChar();
-    }
-
-    // --- Show gallery 1 ---
-    function showGallery1(){
-      const gallery1 = document.getElementById("gallery1");
-      gallery1.style.display="block";
-
-      const nextBtn = document.getElementById("nextBtn");
-      nextBtn.style.display="block";
-
-      gallery1Images.forEach(filename=>{
-        const img=document.createElement("img");
-        img.src="images/"+filename;
-        img.alt="Us";
-        img.onclick=()=>handleImageClick(filename,img.src);
-        gallery1.appendChild(img);
-      });
-
-      nextBtn.onclick = showHiPage;
-    }
-
-    // --- Black hi screen ---
-    function showHiPage(){
-      document.getElementById("gallery1").style.display="none";
-      document.getElementById("preGalleryMessage").style.display="none";
-      document.getElementById("nextBtn").style.display="none";
-
-      const hiPage = document.getElementById("hiPage");
-      const hiText = document.getElementById("hiText");
-      hiPage.style.display="block";
-
-      let index = 0;
-      const message = "hi";
-
-      function typeHi(){
-        if(index<message.length){ hiText.innerHTML+=message[index++]; setTimeout(typeHi,speed); }
-        else showGallery2();
-      }
-      hiText.innerHTML="";
-      typeHi();
-    }
-
-    // --- Gallery 2 ---
-    function showGallery2(){
-      const gallery2 = document.getElementById("gallery2");
-      gallery2.style.display="block";
-
-      if(gallery2.childElementCount===0){
-        gallery2Images.forEach(filename=>{
-          const img=document.createElement("img");
-          img.src="images/"+filename;
-          img.alt="Us";
-          img.onclick=()=>handleImageClick(filename,img.src);
-          gallery2.appendChild(img);
-        });
-      }
-    }
-
-    // --- Image click popup ---
-    function handleImageClick(filename,src){
-      const modal = document.getElementById("modal");
-      const modalImg = document.getElementById("modalImg");
-      modalImg.src = src;
-      modal.style.display = "flex";
-
-      if(imageMessages[filename]) showPopupMessage(imageMessages[filename]);
-    }
-
-    // --- Popup message typing ---
-    function showPopupMessage(text){
-      const popup = document.getElementById("popupText");
-      const popupMessage = document.getElementById("popupMessage");
-      popup.style.display="block";
-      popupMessage.innerHTML="";
-      let i=0;
-      function t(){
-        if(i<text.length){ popupMessage.innerHTML+=text[i++]; setTimeout(t,60);}
-      }
-      t();
-      setTimeout(()=>{ popup.style.display="none"; },4000);
-    }
-
-    // --- Close modal ---
-    document.getElementById("modal").addEventListener("click",()=>{
-      document.getElementById("modal").style.display="none";
     });
+  });
+}
+window.onload=startTyping;
 
-  </script>
+// --- Timeline page ---
+function showTimelinePage(){
+  document.querySelectorAll('.line, .cursor').forEach(el=>el.style.display='none');
+  document.getElementById("preGalleryMessage").style.display = "none";
+  const timelinePage = document.getElementById("timelinePage");
+  const container = document.getElementById("timelineContainer");
+  timelinePage.style.display="block";
+
+  if(container.childElementCount===0){
+    timelineImages.forEach(filename=>{
+      const img=document.createElement("img");
+      img.src="images/"+filename;
+      img.onclick=()=>handleImageClick(filename,img.src);
+      container.appendChild(img);
+    });
+  }
+
+  document.getElementById("timelineNextBtn").onclick=()=>{
+    timelinePage.style.display="none";
+    showGallery1();
+  };
+}
+
+// --- Show gallery 1 ---
+function showGallery1(){
+  const gallery1 = document.getElementById("gallery1");
+  gallery1.style.display="block";
+
+  // Keep the top message visible
+  const msgEl = document.getElementById("preGalleryMessage");
+  msgEl.style.display="block";
+
+  const nextBtn = document.getElementById("nextBtn");
+  nextBtn.style.display="block";
+
+  gallery1Images.forEach(filename=>{
+    const img=document.createElement("img");
+    img.src="images/"+filename;
+    img.alt="Us";
+    img.onclick=()=>handleImageClick(filename,img.src);
+    gallery1.appendChild(img);
+  });
+
+  nextBtn.onclick = showHiPage;
+}
+
+// --- Black hi screen ---
+function showHiPage(){
+  document.getElementById("gallery1").style.display="none";
+  document.getElementById("preGalleryMessage").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+
+  const hiPage = document.getElementById("hiPage");
+  const hiText = document.getElementById("hiText");
+  hiPage.style.display="block";
+
+  let index = 0;
+  const message = "hi";
+
+  function typeHi(){
+    if(index<message.length){ hiText.innerHTML+=message[index++]; setTimeout(typeHi,speed); }
+    else showGallery2();
+  }
+  hiText.innerHTML="";
+  typeHi();
+}
+
+// --- Gallery 2 ---
+function showGallery2(){
+  const gallery2 = document.getElementById("gallery2");
+  gallery2.style.display="block";
+
+  if(gallery2.childElementCount===0){
+    gallery2Images.forEach(filename=>{
+      const img=document.createElement("img");
+      img.src="images/"+filename;
+      img.alt="Us";
+      img.onclick=()=>handleImageClick(filename,img.src);
+      gallery2.appendChild(img);
+    });
+  }
+}
+
+// --- Image click popup ---
+function handleImageClick(filename,src){
+  const modal = document.getElementById("modal");
+  const modalImg = document.getElementById("modalImg");
+  modalImg.src = src;
+  modal.style.display = "flex";
+
+  if(imageMessages[filename]) showPopupMessage(imageMessages[filename]);
+}
+
+// --- Popup message typing ---
+function showPopupMessage(text){
+  const popup = document.getElementById("popupText");
+  const popupMessage = document.getElementById("popupMessage");
+  popup.style.display="block";
+  popupMessage.innerHTML="";
+  let i=0;
+  function t(){
+    if(i<text.length){ popupMessage.innerHTML+=text[i++]; setTimeout(t,60);}
+  }
+  t();
+  setTimeout(()=>{ popup.style.display="none"; },4000);
+}
+
+// --- Close modal ---
+document.getElementById("modal").addEventListener("click",()=>{
+  document.getElementById("modal").style.display="none";
+});
+</script>
 </body>
 </html>
