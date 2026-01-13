@@ -2,61 +2,54 @@
 <html>
 <head>
   <title>❤️</title>
+
   <style>
     body {
       font-family: "Courier New", monospace;
       background-color: #000;
       color: #fff;
-      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
       padding: 20px;
       font-size: 32px;
       text-align: left;
-      overflow-x: hidden;
+      overflow: auto;
       transition: background-color 0.5s ease;
       position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
     }
 
-    .line { display: block; }
+    .line { display:block; }
+
     .cursor {
-      display: inline-block;
-      width: 10px;
-      background-color: #fff;
-      margin-left: 2px;
+      display:inline-block;
+      width:10px;
+      background-color:white;
+      margin-left:2px;
       animation: blink 1s step-start infinite;
     }
-    @keyframes blink { 50% { background-color: transparent; } }
 
-    #preGalleryMessage {
-      display: none;
-      font-size: 36px;
-      color: #fff;
-      margin-top: 20px;
-    }
+    @keyframes blink {50% {background-color:transparent;}}
 
     .gallery {
-      display: none;
-      width: 100%;
-      column-count: 4;
-      column-gap: 20px;
-      margin-top: 20px;
-    }
-    .gallery img {
-      width: 100%;
-      height: auto;
-      margin-bottom: 20px;
-      border: 3px solid #fff;
-      border-radius: 10px;
-      cursor: pointer;
+      display:none;
+      width:100%;
+      column-count:4;
+      column-gap:20px;
+      margin-top:20px;
     }
 
-    button.nextBtn {
-      display: none;
-      position: fixed;
-      top: 20px;
-      right: 20px;
+    .gallery img {
+      width:100%;
+      height:auto;
+      margin-bottom:20px;
+      border:3px solid #fff;
+      border-radius:10px;
+      cursor:pointer;
+    }
+
+    button {
       font-size: 24px;
       padding: 10px 20px;
       background-color: #ff69b4;
@@ -65,69 +58,81 @@
       border-radius: 10px;
       cursor: pointer;
       z-index: 100;
+      margin-top: 20px;
     }
 
-    @media (max-width: 1200px) { .gallery { column-count: 3; } }
-    @media (max-width: 800px) { .gallery { column-count: 2; } }
-    @media (max-width: 500px) { .gallery { column-count: 1; } }
+    #nextBtn, #timelineNextBtn, #backBtn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+
+    #backBtn {
+      right: 150px;
+    }
+
+    @media(max-width:1200px){ .gallery{ column-count:3; } }
+    @media(max-width:800px){ .gallery{ column-count:2; } }
+    @media(max-width:500px){ .gallery{ column-count:1; } }
 
     #modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      display:none;
+      position:fixed;
+      top:0; left:0;
+      width:100%; height:100%;
       background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    #modal img {
-      max-width: 90%;
-      max-height: 90%;
-      border: 5px solid #fff;
-      border-radius: 10px;
+      justify-content:center;
+      align-items:center;
+      z-index:1000;
     }
 
-    #hiPage {
-      display: none;
-      font-size: 48px;
-      margin-top: 0; /* typing at top */
+    #modal img {
+      max-width:90%;
+      max-height:90%;
+      border:5px solid #fff;
+      border-radius:10px;
     }
 
     #popupText {
-      display: none;
-      position: fixed;
-      bottom: 30px;
-      left: 30px;
-      background: #ff69b4;
-      color: white;
-      border: 2px solid white;
-      padding: 15px 20px;
-      font-size: 20px;
-      border-radius: 10px;
-      z-index: 1100;
+      display:none;
+      position:fixed;
+      bottom:30px;
+      left:30px;
+      background:#ff69b4;
+      color:white;
+      border:2px solid white;
+      padding:15px 20px;
+      font-size:20px;
+      border-radius:10px;
+      z-index:1100;
     }
 
-    /* Timeline page full screen */
+    #hiPage {
+      display:none;
+      font-size:48px;
+      margin-bottom:20px;
+    }
+
     #timelinePage {
       display:none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #ffb6c1; /* light pink */
-      flex-direction: column;
-      align-items: flex-start;
-      padding: 20px;
-      overflow-y: auto;
-      z-index: 500;
+      background-color:#ffb6c1;
+      width:100%;
+      padding:20px;
+      flex-direction:column;
+      align-items:flex-start;
     }
-    #timelinePage h2 { font-size:36px; margin-bottom:20px; }
-    #timelineContainer img { width:200px; border:3px solid white; border-radius:10px; cursor:pointer; margin-bottom:10px; }
+
+    #timelineContainer img {
+      width:200px;
+      border:3px solid white;
+      border-radius:10px;
+      cursor:pointer;
+      margin-bottom:10px;
+    }
   </style>
 </head>
-<body>
 
+<body>
   <!-- Terminal typing first page -->
   <div id="line1" class="line">&gt; </div><span class="cursor"></span>
   <div id="lineEllipsis1" class="line">&gt; </div>
@@ -135,19 +140,20 @@
   <div id="lineEllipsis2" class="line">&gt; </div>
   <div id="line3" class="line">&gt; </div>
 
+  <div id="preGalleryMessage">&gt; </div>
+
+  <button id="nextBtn">Next</button>
+  <button id="backBtn" style="display:none;">Back</button>
+
   <!-- Timeline page -->
   <div id="timelinePage">
     <h2>&gt; Our journey together</h2>
     <div id="timelineContainer"></div>
-    <button id="timelineNextBtn" class="nextBtn">Next</button>
+    <button id="timelineNextBtn">Next</button>
   </div>
 
   <!-- Gallery 1 -->
   <div id="gallery1" class="gallery"></div>
-
-  <!-- Pink typing screen -->
-  <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
-  <button id="nextBtn" class="nextBtn">Next</button>
 
   <!-- Gallery 2 -->
   <div id="gallery2" class="gallery"></div>
@@ -155,41 +161,65 @@
   <!-- Modal -->
   <div id="modal"><img id="modalImg" src=""></div>
 
-  <!-- Popup text -->
+  <!-- Popup text for image messages -->
   <div id="popupText">&gt; <span id="popupMessage"></span><span class="cursor"></span></div>
 
 <script>
-const speed = 100;
+const speed=100;
 
-const firstMessage = "hi aarjav!!";
-const secondMessage = "happy anniversary ♥";
-const thirdMessage = "thank you for the best year :)";
+const firstMessage="hi aarjav!!";
+const secondMessage="happy anniversary ♥";
+const thirdMessage="thank you for the best year :)";
 
-const timelineImages = ["IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg"];
-const gallery1Images = ["lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"];
-const gallery2Images = ["IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg","IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg","5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"];
-const imageMessages = { "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)" };
+const gallery1Images=[
+  "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg",
+  "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
+];
 
-// Typing functions
-function typeMessage(elementId, message, callback){
+const gallery2Images=[
+  "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
+  "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg",
+  "5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"
+];
+
+const timelineImages=[
+  "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg"
+];
+
+const imageMessages={
+  "IMG_6273.jpg":"birthday boy (a date fully planned by me btw)"
+};
+
+// History stack for Back button
+let historyStack=[];
+
+// --- Typing functions ---
+function typeMessage(elId,msg,cb){
   let i=0;
-  function t(){ if(i<message.length){ document.getElementById(elementId).innerHTML+=message[i++]; setTimeout(t,speed);} else if(callback) callback(); }
+  function t(){ 
+    if(i<msg.length){ document.getElementById(elId).innerHTML+=msg[i++]; setTimeout(t,speed); }
+    else if(cb) cb();
+  }
   t();
 }
-function typeEllipsis(elementId, callback){
-  const ellipsis="...";
+
+function typeEllipsis(elId,cb){
+  const e="...";
   let i=0;
-  function t(){ if(i<ellipsis.length){ document.getElementById(elementId).innerHTML+=ellipsis[i++]; setTimeout(t,speed);} else if(callback) setTimeout(callback,300);}
+  function t(){ 
+    if(i<e.length){ document.getElementById(elId).innerHTML+=e[i++]; setTimeout(t,speed);}
+    else if(cb) setTimeout(cb,300);
+  }
   t();
 }
 
-// Start terminal typing
+// --- Start terminal typing ---
 function startTyping(){
-  typeMessage("line1", firstMessage, ()=>{
-    typeEllipsis("lineEllipsis1", ()=>{
-      typeMessage("line2", secondMessage, ()=>{
-        typeEllipsis("lineEllipsis2", ()=>{
-          typeMessage("line3", thirdMessage, showTimelinePage);
+  typeMessage("line1",firstMessage,()=>{
+    typeEllipsis("lineEllipsis1",()=>{
+      typeMessage("line2",secondMessage,()=>{
+        typeEllipsis("lineEllipsis2",()=>{
+          typeMessage("line3",thirdMessage,showTimelinePage);
         });
       });
     });
@@ -197,58 +227,52 @@ function startTyping(){
 }
 window.onload=startTyping;
 
-// Timeline page
+// --- Timeline page ---
 function showTimelinePage(){
-  document.querySelectorAll('.line, .cursor, #preGalleryMessage, #gallery1, #gallery2, #hiPage, #nextBtn').forEach(el=>el.style.display='none');
-  const timelinePage = document.getElementById("timelinePage");
-  timelinePage.style.display = "flex";
+  hideAllScreens();
+  historyStack.push(showTimelinePage);
+  document.getElementById("timelinePage").style.display="flex";
+  document.getElementById("timelinePage").style.backgroundColor="#ffb6c1";
+  document.getElementById("backBtn").style.display="block";
 
-  const container = document.getElementById("timelineContainer");
+  const container=document.getElementById("timelineContainer");
   if(container.childElementCount===0){
     timelineImages.forEach(fn=>{
-      const img = document.createElement("img");
-      img.src = "images/"+fn;
-      img.onclick = () => handleImageClick(fn,img.src);
+      const img=document.createElement("img");
+      img.src="images/"+fn;
+      img.onclick=()=>handleImageClick(fn,img.src);
       container.appendChild(img);
     });
   }
 
-  const timelineNextBtn = document.getElementById("timelineNextBtn");
-  timelineNextBtn.style.display = "block";
-  timelineNextBtn.onclick = () => {
-    timelinePage.style.display = "none";
-    showPinkScreen();
-  };
+  const timelineNextBtn=document.getElementById("timelineNextBtn");
+  timelineNextBtn.style.display="block";
+  timelineNextBtn.onclick=showPinkScreen;
 }
 
-// Pink typing screen
+// --- Pink screen typing ---
 function showPinkScreen(){
-  document.body.style.backgroundColor = "#ffb6c1";
-  const hiPage = document.getElementById("hiPage");
-  hiPage.style.display = "block";
-  hiPage.style.marginTop = "0"; // typing at top
-  const hiText = document.getElementById("hiText");
-  hiText.innerHTML = "&gt; "; // start with > 
-
-  const message = "my favorite photos (solo shots first)";
-  let index = 0;
-  function typeHi(){
-    if(index<message.length){ 
-      hiText.innerHTML += message[index++]; 
-      setTimeout(typeHi,speed);
-    } else {
-      showGallery1(); // show gallery but keep hiText
-    }
-  }
-  typeHi();
+  hideAllScreens();
+  historyStack.push(showPinkScreen);
+  document.body.style.backgroundColor="#ffb6c1";
+  const preMsg=document.getElementById("preGalleryMessage");
+  preMsg.innerHTML="&gt; ";
+  preMsg.style.display="block";
+  document.getElementById("backBtn").style.display="block";
+  let i=0;
+  const message="my favorite photos (solo shots first)";
+  function t(){ if(i<message.length){ preMsg.innerHTML+=message[i++]; setTimeout(t,speed);}
+  else typeEllipsis("preGalleryMessage",showGallery1);}
+  t();
 }
 
-// Gallery 1
+// --- Gallery 1 ---
 function showGallery1(){
-  const gallery1 = document.getElementById("gallery1");
+  hideAllScreens();
+  historyStack.push(showGallery1);
+  const gallery1=document.getElementById("gallery1");
   gallery1.style.display="block";
-  gallery1.innerHTML = "";
-
+  gallery1.innerHTML="";
   gallery1Images.forEach(fn=>{
     const img=document.createElement("img");
     img.src="images/"+fn;
@@ -256,47 +280,62 @@ function showGallery1(){
     gallery1.appendChild(img);
   });
 
-  const nextBtn = document.getElementById("nextBtn");
+  const nextBtn=document.getElementById("nextBtn");
   nextBtn.style.display="block";
-  nextBtn.onclick = showGallery2;
-
-  // Make sure the hiText stays visible at the top
-  const hiPage = document.getElementById("hiPage");
-  hiPage.style.display = "block"; // do not hide
-  hiPage.style.marginBottom = "20px"; // spacing from gallery
+  document.getElementById("backBtn").style.display="block";
+  nextBtn.onclick=showGallery2;
 }
 
-
-// Gallery 2
+// --- Gallery 2 ---
 function showGallery2(){
-  document.getElementById("gallery1").style.display="none";
-  document.getElementById("nextBtn").style.display="none";
-  const gallery2 = document.getElementById("gallery2");
+  hideAllScreens();
+  historyStack.push(showGallery2);
+  const gallery2=document.getElementById("gallery2");
   gallery2.style.display="block";
-  if(gallery2.childElementCount===0){
-    gallery2Images.forEach(fn=>{
-      const img = document.createElement("img");
-      img.src = "images/"+fn;
-      img.onclick = () => handleImageClick(fn,img.src);
-      gallery2.appendChild(img);
-    });
+  gallery2.innerHTML="";
+  gallery2Images.forEach(fn=>{
+    const img=document.createElement("img");
+    img.src="images/"+fn;
+    img.onclick=()=>handleImageClick(fn,img.src);
+    gallery2.appendChild(img);
+  });
+  document.getElementById("backBtn").style.display="block";
+}
+
+// --- Hide everything helper ---
+function hideAllScreens(){
+  document.getElementById("timelinePage").style.display="none";
+  document.getElementById("preGalleryMessage").style.display="none";
+  document.getElementById("gallery1").style.display="none";
+  document.getElementById("gallery2").style.display="none";
+  document.getElementById("hiPage").style.display="none";
+  document.getElementById("nextBtn").style.display="none";
+  document.getElementById("timelineNextBtn").style.display="none";
+}
+
+// --- Back button ---
+document.getElementById("backBtn").onclick = ()=>{
+  if(historyStack.length>1){
+    historyStack.pop(); // remove current
+    const prev=historyStack.pop(); // get previous
+    prev();
   }
+};
+
+// --- Image click popup ---
+function handleImageClick(fn,src){
+  const modal=document.getElementById("modal");
+  const modalImg=document.getElementById("modalImg");
+  modalImg.src=src;
+  modal.style.display="flex";
+
+  if(imageMessages[fn]) showPopupMessage(imageMessages[fn]);
 }
 
-// Image click popup
-function handleImageClick(filename,src){
-  const modal = document.getElementById("modal");
-  const modalImg = document.getElementById("modalImg");
-  modalImg.src = src;
-  modal.style.display = "flex";
-
-  if(imageMessages[filename]) showPopupMessage(imageMessages[filename]);
-}
-
-// Popup message
+// --- Popup message typing ---
 function showPopupMessage(text){
-  const popup = document.getElementById("popupText");
-  const popupMessage = document.getElementById("popupMessage");
+  const popup=document.getElementById("popupText");
+  const popupMessage=document.getElementById("popupMessage");
   popup.style.display="block";
   popupMessage.innerHTML="";
   let i=0;
@@ -305,8 +344,8 @@ function showPopupMessage(text){
   setTimeout(()=>{ popup.style.display="none"; },4000);
 }
 
-// Close modal
-document.getElementById("modal").addEventListener("click",()=>{document.getElementById("modal").style.display="none";});
+// --- Close modal ---
+document.getElementById("modal").addEventListener("click",()=>{ document.getElementById("modal").style.display="none"; });
 </script>
 </body>
 </html>
