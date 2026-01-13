@@ -7,16 +7,16 @@
       font-family: "Courier New", monospace;
       background-color: #000;
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: flex-start;
+      margin: 0;
       padding: 20px;
       font-size: 32px;
       text-align: left;
-      overflow: auto;
+      overflow-x: hidden;
       transition: background-color 0.5s ease;
       position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .line { display: block; }
@@ -90,8 +90,8 @@
 
     #hiPage {
       display: none;
-      margin-top: 20px;
       font-size: 48px;
+      margin-top: 0; /* typing at top */
     }
 
     #popupText {
@@ -108,15 +108,19 @@
       z-index: 1100;
     }
 
-    /* Timeline page */
+    /* Timeline page full screen */
     #timelinePage {
       display:none;
-      margin-top:20px;
-      width:100%;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #ffb6c1; /* light pink */
       flex-direction: column;
       align-items: flex-start;
       padding: 20px;
-      background-color: #ffb6c1; /* light pink */
+      overflow-y: auto;
+      z-index: 500;
     }
     #timelinePage h2 { font-size:36px; margin-bottom:20px; }
     #timelineContainer img { width:200px; border:3px solid white; border-radius:10px; cursor:pointer; margin-bottom:10px; }
@@ -131,8 +135,6 @@
   <div id="lineEllipsis2" class="line">&gt; </div>
   <div id="line3" class="line">&gt; </div>
 
-  <div id="preGalleryMessage">&gt; </div>
-
   <!-- Timeline page -->
   <div id="timelinePage">
     <h2>&gt; Our journey together</h2>
@@ -143,8 +145,9 @@
   <!-- Gallery 1 -->
   <div id="gallery1" class="gallery"></div>
 
-  <!-- Pink "my favorite photos..." screen -->
+  <!-- Pink typing screen -->
   <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
+  <button id="nextBtn" class="nextBtn">Next</button>
 
   <!-- Gallery 2 -->
   <div id="gallery2" class="gallery"></div>
@@ -152,7 +155,7 @@
   <!-- Modal -->
   <div id="modal"><img id="modalImg" src=""></div>
 
-  <!-- Popup text for image messages -->
+  <!-- Popup text -->
   <div id="popupText">&gt; <span id="popupMessage"></span><span class="cursor"></span></div>
 
 <script>
@@ -165,23 +168,22 @@ const thirdMessage = "thank you for the best year :)";
 const timelineImages = ["IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg"];
 const gallery1Images = ["lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"];
 const gallery2Images = ["IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg","IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg","5D987C5B-EC47-42A1-A716-EC82306B31A4 (1).jpg"];
-
 const imageMessages = { "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)" };
 
-// --- Typing functions ---
+// Typing functions
 function typeMessage(elementId, message, callback){
-  let index=0;
-  function t(){ if(index<message.length){ document.getElementById(elementId).innerHTML+=message[index++]; setTimeout(t,speed); } else if(callback) callback();}
+  let i=0;
+  function t(){ if(i<message.length){ document.getElementById(elementId).innerHTML+=message[i++]; setTimeout(t,speed);} else if(callback) callback(); }
   t();
 }
 function typeEllipsis(elementId, callback){
   const ellipsis="...";
-  let index=0;
-  function t(){ if(index<ellipsis.length){ document.getElementById(elementId).innerHTML+=ellipsis[index++]; setTimeout(t,speed);} else if(callback) setTimeout(callback,300);}
+  let i=0;
+  function t(){ if(i<ellipsis.length){ document.getElementById(elementId).innerHTML+=ellipsis[i++]; setTimeout(t,speed);} else if(callback) setTimeout(callback,300);}
   t();
 }
 
-// --- Start first page typing ---
+// Start terminal typing
 function startTyping(){
   typeMessage("line1", firstMessage, ()=>{
     typeEllipsis("lineEllipsis1", ()=>{
@@ -195,9 +197,9 @@ function startTyping(){
 }
 window.onload=startTyping;
 
-// --- Timeline page ---
+// Timeline page
 function showTimelinePage(){
-  document.querySelectorAll('.line, .cursor, #preGalleryMessage, #gallery1, #gallery2, #hiPage').forEach(el=>el.style.display='none');
+  document.querySelectorAll('.line, .cursor, #preGalleryMessage, #gallery1, #gallery2, #hiPage, #nextBtn').forEach(el=>el.style.display='none');
   const timelinePage = document.getElementById("timelinePage");
   timelinePage.style.display = "flex";
 
@@ -219,47 +221,46 @@ function showTimelinePage(){
   };
 }
 
-// --- Pink "my favorite photos first" screen ---
+// Pink typing screen
 function showPinkScreen(){
   document.body.style.backgroundColor = "#ffb6c1";
   const hiPage = document.getElementById("hiPage");
   hiPage.style.display = "block";
+  hiPage.style.marginTop = "0"; // typing at top
   const hiText = document.getElementById("hiText");
   hiText.innerHTML = "&gt; ";
   const message = "my favorite photos (solo shots first)";
   let index = 0;
   function typeHi(){
-    if(index<message.length){ hiText.innerHTML += message[index++]; setTimeout(typeHi, speed);}
+    if(index<message.length){ hiText.innerHTML+=message[index++]; setTimeout(typeHi,speed);}
     else showGallery1();
   }
   typeHi();
 }
 
-// --- Show Gallery 1 ---
+// Gallery 1
 function showGallery1(){
   const gallery1 = document.getElementById("gallery1");
   gallery1.style.display="block";
-
+  gallery1.innerHTML = "";
   gallery1Images.forEach(fn=>{
     const img=document.createElement("img");
-    img.src = "images/"+fn;
+    img.src="images/"+fn;
     img.onclick=()=>handleImageClick(fn,img.src);
     gallery1.appendChild(img);
   });
 
-  // Show Next button to go to Gallery 2
   const nextBtn = document.getElementById("nextBtn");
   nextBtn.style.display="block";
   nextBtn.onclick = showGallery2;
 }
 
-// --- Show Gallery 2 ---
+// Gallery 2
 function showGallery2(){
   document.getElementById("gallery1").style.display="none";
   document.getElementById("nextBtn").style.display="none";
   const gallery2 = document.getElementById("gallery2");
   gallery2.style.display="block";
-
   if(gallery2.childElementCount===0){
     gallery2Images.forEach(fn=>{
       const img = document.createElement("img");
@@ -270,7 +271,7 @@ function showGallery2(){
   }
 }
 
-// --- Image click popup ---
+// Image click popup
 function handleImageClick(filename,src){
   const modal = document.getElementById("modal");
   const modalImg = document.getElementById("modalImg");
@@ -280,19 +281,19 @@ function handleImageClick(filename,src){
   if(imageMessages[filename]) showPopupMessage(imageMessages[filename]);
 }
 
-// --- Popup message typing ---
+// Popup message
 function showPopupMessage(text){
   const popup = document.getElementById("popupText");
   const popupMessage = document.getElementById("popupMessage");
   popup.style.display="block";
   popupMessage.innerHTML="";
   let i=0;
-  function t(){ if(i<text.length){ popupMessage.innerHTML+=text[i++]; setTimeout(t,60); } }
+  function t(){ if(i<text.length){ popupMessage.innerHTML+=text[i++]; setTimeout(t,60);} }
   t();
   setTimeout(()=>{ popup.style.display="none"; },4000);
 }
 
-// --- Close modal ---
+// Close modal
 document.getElementById("modal").addEventListener("click",()=>{document.getElementById("modal").style.display="none";});
 </script>
 </body>
