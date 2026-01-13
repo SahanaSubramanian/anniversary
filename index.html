@@ -228,12 +228,17 @@ function showPinkScreen(){
   hiPage.style.display = "block";
   hiPage.style.marginTop = "0"; // typing at top
   const hiText = document.getElementById("hiText");
-  hiText.innerHTML = "&gt; ";
+  hiText.innerHTML = "&gt; "; // start with > 
+
   const message = "my favorite photos (solo shots first)";
   let index = 0;
   function typeHi(){
-    if(index<message.length){ hiText.innerHTML+=message[index++]; setTimeout(typeHi,speed);}
-    else showGallery1();
+    if(index<message.length){ 
+      hiText.innerHTML += message[index++]; 
+      setTimeout(typeHi,speed);
+    } else {
+      showGallery1(); // show gallery but keep hiText
+    }
   }
   typeHi();
 }
@@ -243,6 +248,7 @@ function showGallery1(){
   const gallery1 = document.getElementById("gallery1");
   gallery1.style.display="block";
   gallery1.innerHTML = "";
+
   gallery1Images.forEach(fn=>{
     const img=document.createElement("img");
     img.src="images/"+fn;
@@ -253,7 +259,13 @@ function showGallery1(){
   const nextBtn = document.getElementById("nextBtn");
   nextBtn.style.display="block";
   nextBtn.onclick = showGallery2;
+
+  // Make sure the hiText stays visible at the top
+  const hiPage = document.getElementById("hiPage");
+  hiPage.style.display = "block"; // do not hide
+  hiPage.style.marginBottom = "20px"; // spacing from gallery
 }
+
 
 // Gallery 2
 function showGallery2(){
