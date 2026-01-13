@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>❤️</title>
-
   <style>
     body {
       font-family: "Courier New", monospace;
@@ -99,6 +98,7 @@
       font-size: 48px;
     }
 
+    /* Popup message */
     #popupText {
       display: none;
       position: fixed;
@@ -122,8 +122,16 @@
       padding: 20px;
       box-sizing: border-box;
     }
+
     #timelinePage h2 { font-size: 36px; }
-    #timelineContainer img { width: 200px; border: 3px solid white; border-radius: 10px; cursor: pointer; margin-bottom: 10px; }
+    #timelineContainer img { 
+      width: 200px; 
+      border: 3px solid white; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      margin-bottom: 10px; 
+    }
+
     #timelineNextBtn {
       display: inline-block;
       margin-top: 20px;
@@ -137,7 +145,6 @@
     }
   </style>
 </head>
-
 <body>
 
   <!-- Terminal typing first page -->
@@ -170,6 +177,9 @@
   <!-- Modal -->
   <div id="modal"><img id="modalImg" src=""></div>
 
+  <!-- Popup message -->
+  <div id="popupText"><span id="popupMessage"></span></div>
+
   <script>
     const speed = 100;
 
@@ -193,15 +203,19 @@
     ];
 
     const imageMessages = {
-      "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)"
+      "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)",
+      "IMG_5847.jpg": "our first adventure together"
+      // Add more messages as needed
     };
 
     // --- Typing functions ---
     function typeMessage(elementId, message, callback){
       let index=0;
       function t(){
-        if(index<message.length){ document.getElementById(elementId).innerHTML+=message[index++]; setTimeout(t,speed);}
-        else if(callback) callback();
+        if(index<message.length){ 
+          document.getElementById(elementId).innerHTML+=message[index++]; 
+          setTimeout(t,speed);
+        } else if(callback) callback();
       }
       t();
     }
@@ -210,8 +224,10 @@
       const ellipsis = "...";
       let index=0;
       function t(){
-        if(index<ellipsis.length){ document.getElementById(elementId).innerHTML+=ellipsis[index++]; setTimeout(t,speed);}
-        else if(callback) setTimeout(callback,300);
+        if(index<ellipsis.length){ 
+          document.getElementById(elementId).innerHTML+=ellipsis[index++]; 
+          setTimeout(t,speed);
+        } else if(callback) setTimeout(callback,300);
       }
       t();
     }
@@ -263,8 +279,12 @@
       const message="my favorite photos (solo shots first)";
       let index=0;
       function typeChar(){
-        if(index<message.length){ msgEl.innerHTML+=message[index++]; setTimeout(typeChar,speed);}
-        else typeEllipsis("preGalleryMessage", showGallery1);
+        if(index<message.length){ 
+          msgEl.innerHTML+=message[index++]; 
+          setTimeout(typeChar,speed);
+        } else {
+          typeEllipsis("preGalleryMessage", showGallery1);
+        }
       }
       typeChar();
     }
@@ -277,13 +297,15 @@
       const nextBtn = document.getElementById("nextBtn");
       nextBtn.style.display="block";
 
-      gallery1Images.forEach(filename=>{
-        const img=document.createElement("img");
-        img.src="images/"+filename;
-        img.alt="Us";
-        img.onclick=()=>handleImageClick(filename,img.src);
-        gallery1.appendChild(img);
-      });
+      if(gallery1.childElementCount===0){
+        gallery1Images.forEach(filename=>{
+          const img=document.createElement("img");
+          img.src="images/"+filename;
+          img.alt="Us";
+          img.onclick=()=>handleImageClick(filename,img.src);
+          gallery1.appendChild(img);
+        });
+      }
 
       nextBtn.onclick = showHiPage;
     }
@@ -302,8 +324,10 @@
       const message = "hi";
 
       function typeHi(){
-        if(index<message.length){ hiText.innerHTML+=message[index++]; setTimeout(typeHi,speed); }
-        else showGallery2();
+        if(index<message.length){ 
+          hiText.innerHTML+=message[index++]; 
+          setTimeout(typeHi,speed); 
+        } else showGallery2();
       }
       hiText.innerHTML="";
       typeHi();
@@ -332,6 +356,7 @@
       modalImg.src = src;
       modal.style.display = "flex";
 
+      // Only show popup if there's a message for this image
       if(imageMessages[filename]) showPopupMessage(imageMessages[filename]);
     }
 
@@ -339,21 +364,24 @@
     function showPopupMessage(text){
       const popup = document.getElementById("popupText");
       const popupMessage = document.getElementById("popupMessage");
-      popup.style.display="block";
-      popupMessage.innerHTML="";
-      let i=0;
-      function t(){
-        if(i<text.length){ popupMessage.innerHTML+=text[i++]; setTimeout(t,60);}
+      popup.style.display = "block";
+      popupMessage.innerHTML = "";
+      let i = 0;
+      function typeChar(){
+        if(i<text.length){ 
+          popupMessage.innerHTML += text[i++]; 
+          setTimeout(typeChar, 60);
+        }
       }
-      t();
-      setTimeout(()=>{ popup.style.display="none"; },4000);
+      typeChar();
+      setTimeout(()=>{ popup.style.display="none"; }, 4000);
     }
 
-    // --- Close modal ---
-    document.getElementById("modal").addEventListener("click",()=>{
+    // --- Close modal on click ---
+    document.getElementById("modal").addEventListener("click", ()=>{
       document.getElementById("modal").style.display="none";
     });
-
   </script>
+
 </body>
 </html>
