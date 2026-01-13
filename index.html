@@ -49,7 +49,11 @@
       cursor:pointer;
     }
 
-    button {
+    #nextBtn, #timelineNextBtn {
+      display:none;
+      position: fixed;
+      top: 20px;
+      right: 20px;
       font-size: 24px;
       padding: 10px 20px;
       background-color: #ff69b4;
@@ -58,17 +62,6 @@
       border-radius: 10px;
       cursor: pointer;
       z-index: 100;
-      margin-top: 20px;
-    }
-
-    #nextBtn, #timelineNextBtn, #backBtn {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-    }
-
-    #backBtn {
-      right: 150px;
     }
 
     @media(max-width:1200px){ .gallery{ column-count:3; } }
@@ -143,7 +136,6 @@
   <div id="preGalleryMessage">&gt; </div>
 
   <button id="nextBtn">Next</button>
-  <button id="backBtn" style="display:none;">Back</button>
 
   <!-- Timeline page -->
   <div id="timelinePage">
@@ -159,7 +151,7 @@
   <div id="gallery2" class="gallery"></div>
 
   <!-- Modal -->
-  <div id="modal"><img id="modalImg" src=""></div>
+  <div id="modal"><img id="modalImg"></div>
 
   <!-- Popup text for image messages -->
   <div id="popupText">&gt; <span id="popupMessage"></span><span class="cursor"></span></div>
@@ -189,9 +181,6 @@ const timelineImages=[
 const imageMessages={
   "IMG_6273.jpg":"birthday boy (a date fully planned by me btw)"
 };
-
-// History stack for Back button
-let historyStack=[];
 
 // --- Typing functions ---
 function typeMessage(elId,msg,cb){
@@ -229,11 +218,11 @@ window.onload=startTyping;
 
 // --- Timeline page ---
 function showTimelinePage(){
-  hideAllScreens();
-  historyStack.push(showTimelinePage);
-  document.getElementById("timelinePage").style.display="flex";
-  document.getElementById("timelinePage").style.backgroundColor="#ffb6c1";
-  document.getElementById("backBtn").style.display="block";
+  document.querySelectorAll('.line, .cursor, #preGalleryMessage').forEach(el=>el.style.display='none');
+  const timelinePage=document.getElementById("timelinePage");
+  timelinePage.style.display="flex";
+  timelinePage.style.flexDirection="column";
+  timelinePage.style.backgroundColor="#ffb6c1";
 
   const container=document.getElementById("timelineContainer");
   if(container.childElementCount===0){
@@ -250,15 +239,13 @@ function showTimelinePage(){
   timelineNextBtn.onclick=showPinkScreen;
 }
 
-// --- Pink screen typing ---
+// --- Pink screen typing (kept at top) ---
 function showPinkScreen(){
-  hideAllScreens();
-  historyStack.push(showPinkScreen);
+  document.getElementById("timelinePage").style.display="none";
   document.body.style.backgroundColor="#ffb6c1";
   const preMsg=document.getElementById("preGalleryMessage");
   preMsg.innerHTML="&gt; ";
   preMsg.style.display="block";
-  document.getElementById("backBtn").style.display="block";
   let i=0;
   const message="my favorite photos (solo shots first)";
   function t(){ if(i<message.length){ preMsg.innerHTML+=message[i++]; setTimeout(t,speed);}
@@ -268,8 +255,6 @@ function showPinkScreen(){
 
 // --- Gallery 1 ---
 function showGallery1(){
-  hideAllScreens();
-  historyStack.push(showGallery1);
   const gallery1=document.getElementById("gallery1");
   gallery1.style.display="block";
   gallery1.innerHTML="";
@@ -282,14 +267,11 @@ function showGallery1(){
 
   const nextBtn=document.getElementById("nextBtn");
   nextBtn.style.display="block";
-  document.getElementById("backBtn").style.display="block";
   nextBtn.onclick=showGallery2;
 }
 
 // --- Gallery 2 ---
 function showGallery2(){
-  hideAllScreens();
-  historyStack.push(showGallery2);
   const gallery2=document.getElementById("gallery2");
   gallery2.style.display="block";
   gallery2.innerHTML="";
@@ -299,28 +281,7 @@ function showGallery2(){
     img.onclick=()=>handleImageClick(fn,img.src);
     gallery2.appendChild(img);
   });
-  document.getElementById("backBtn").style.display="block";
 }
-
-// --- Hide everything helper ---
-function hideAllScreens(){
-  document.getElementById("timelinePage").style.display="none";
-  document.getElementById("preGalleryMessage").style.display="none";
-  document.getElementById("gallery1").style.display="none";
-  document.getElementById("gallery2").style.display="none";
-  document.getElementById("hiPage").style.display="none";
-  document.getElementById("nextBtn").style.display="none";
-  document.getElementById("timelineNextBtn").style.display="none";
-}
-
-// --- Back button ---
-document.getElementById("backBtn").onclick = ()=>{
-  if(historyStack.length>1){
-    historyStack.pop(); // remove current
-    const prev=historyStack.pop(); // get previous
-    prev();
-  }
-};
 
 // --- Image click popup ---
 function handleImageClick(fn,src){
