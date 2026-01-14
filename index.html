@@ -287,13 +287,18 @@
     function handleImageClick(filename, src){
       const modal = document.getElementById("modal");
       const modalImg = document.getElementById("modalImg");
+
       modalImg.src = src;
       modal.style.display = "flex";
 
-      // FIX: normalize filename to ensure popup works
-      const name = src.split("/").pop().trim(); // get the file name only
-      if(imageMessages[name]) showPopupMessage(imageMessages[name]);
+      // Always trust the filename variable, not the src
+      const cleanName = filename.trim();
+
+      if (imageMessages[cleanName]) {
+        showPopupMessage(imageMessages[cleanName]);
+      }
     }
+
 
     function showPopupMessage(text){
       const popup = document.getElementById("popupText");
