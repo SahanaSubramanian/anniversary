@@ -3,15 +3,17 @@
 <head>
   <title>❤️</title>
   <style>
+    /* ===== BODY ===== */
     body {
+      margin: 0; /* remove default margins to eliminate black edges */
       font-family: "Courier New", monospace;
-      background-color: #000; /* First page black */
+      background-color: #000; /* first page black */
       color: #fff;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: flex-start;
-      padding: 20px;
+      padding: 20px; /* keep padding for first page text */
       font-size: 32px;
       text-align: left;
       overflow: auto;
@@ -19,8 +21,8 @@
       position: relative;
     }
 
+    /* ===== TYPING CURSOR ===== */
     .line { display: block; }
-
     .cursor {
       display: inline-block;
       width: 10px;
@@ -28,7 +30,6 @@
       margin-left: 2px;
       animation: blink 1s step-start infinite;
     }
-
     @keyframes blink { 50% { background-color: transparent; } }
 
     #preGalleryMessage {
@@ -38,6 +39,7 @@
       margin-top: 20px;
     }
 
+    /* ===== GALLERIES ===== */
     .gallery {
       display: none;
       width: 100%;
@@ -58,11 +60,7 @@
       position: relative;
       transition: transform 0.25s ease;
     }
-
-    .gallery img:hover {
-      transform: rotate(-2deg) scale(1.03);
-    }
-
+    .gallery img:hover { transform: rotate(-2deg) scale(1.03); }
     .gallery img:nth-child(odd) { transform: rotate(2deg); }
     .gallery img:nth-child(3n) { transform: rotate(-3deg); }
     .gallery img::after {
@@ -75,6 +73,7 @@
       background: rgba(0,0,0,0.03);
     }
 
+    /* ===== BACK BUTTONS ===== */
     .backBtn {
       display: none;
       font-size: 24px;
@@ -88,6 +87,7 @@
       box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
+    /* ===== MODAL ===== */
     #modal {
       display: none;
       position: fixed;
@@ -98,7 +98,6 @@
       align-items: center;
       z-index: 1000;
     }
-
     #modal img {
       max-width: 90%;
       max-height: 90%;
@@ -106,12 +105,7 @@
       border-radius: 10px;
     }
 
-    #hiPage {
-      display: none;
-      margin-top: 20px;
-      font-size: 48px;
-    }
-
+    /* ===== POPUP ===== */
     #popupText {
       display: none;
       position: fixed;
@@ -126,22 +120,23 @@
       z-index: 1100;
     }
 
-    /* Timeline page with solid color background */
+    /* ===== TIMELINE PAGE ===== */
     #timelinePage {
-      display: none;
-      width: 100%;
-      min-height: 100vh;
-      padding: 20px;
+      display: none; /* hide initially */
+      width: 100vw;      /* full viewport width */
+      min-height: 100vh; /* full viewport height */
+      padding: 0;        /* remove padding so background reaches edges */
       box-sizing: border-box;
-      background-color: #b18c65; /* Solid color */
+      background-color: #b18c65; /* solid color background */
     }
 
-    #timelinePage h2 { font-size: 36px; }
+    #timelinePage h2 { font-size: 36px; padding: 20px; }
 
     #timelineContainer {
       display: flex;
       flex-wrap: wrap;
       gap: 24px;
+      padding: 20px;
     }
 
     #timelineContainer img {
@@ -156,7 +151,6 @@
       position: relative;
       transition: transform 0.25s ease;
     }
-
     #timelineContainer img:hover { transform: rotate(-2deg) scale(1.03); }
     #timelineContainer img:nth-child(odd) { transform: rotate(2deg); }
     #timelineContainer img:nth-child(3n) { transform: rotate(-3deg); }
