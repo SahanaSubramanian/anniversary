@@ -212,7 +212,14 @@
 
   <!-- Popup message -->
   <div id="popupText"><span id="popupMessage"></span></div>
-
+  <div id="letterPage" style="display:none; padding:40px; font-size:26px;">
+    <p>Dear Aarjav,</p>
+    <p>
+      I love you more than words.  
+      Thank you for the most beautiful year of my life.
+    </p>
+    <p>Forever yours ❤️</p>
+  </div>
   <script>
     const speed = 100;
 
@@ -436,14 +443,7 @@
     document.getElementById("modal").addEventListener("click", ()=>{
       document.getElementById("modal").style.display="none";
     });
-    <div id="letterPage" style="display:none; padding:40px; font-size:26px;">
-      <p>Dear Aarjav,</p>
-      <p>
-        I love you more than words.  
-        Thank you for the most beautiful year of my life.
-      </p>
-      <p>Forever yours ❤️</p>
-    </div>
+
     document.getElementById("nextBtn").onclick = () => {
       document.getElementById("timelinePage").style.display = "none";
       document.getElementById("letterPage").style.display = "block";
