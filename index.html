@@ -20,6 +20,17 @@
       position: relative;
       margin: 0;
     }
+    #nextBtn {
+      font-size: 24px;
+      padding: 10px 24px;
+      background-color: #ff69b4;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
 
     .line { display: block; }
     .cursor { display: inline-block; width: 10px; background-color: #fff; margin-left: 2px; animation: blink 1s step-start infinite; }
@@ -189,8 +200,12 @@
   <!-- Timeline page -->
   <div id="timelinePage">
     <h2>&gt; the last year (and more)!</h2>
+
+    <button id="nextBtn">Next</button>
+
     <div id="timelineContainer"></div>
   </div>
+
 
   <!-- Modal -->
   <div id="modal"><img id="modalImg" src=""></div>
@@ -421,6 +436,19 @@
     document.getElementById("modal").addEventListener("click", ()=>{
       document.getElementById("modal").style.display="none";
     });
+    <div id="letterPage" style="display:none; padding:40px; font-size:26px;">
+      <p>Dear Aarjav,</p>
+      <p>
+        I love you more than words.  
+        Thank you for the most beautiful year of my life.
+      </p>
+      <p>Forever yours ❤️</p>
+    </div>
+    document.getElementById("nextBtn").onclick = () => {
+      document.getElementById("timelinePage").style.display = "none";
+      document.getElementById("letterPage").style.display = "block";
+    };
+
   </script>
 </body>
 </html>
