@@ -2,24 +2,23 @@
 <html>
 <head>
   <title>❤️</title>
-  <!-- Handwriting font -->
-  <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
-
   <style>
+    /* --- GENERAL BODY & FONT --- */
     body {
       font-family: "Courier New", monospace;
       background-color: #000; /* first screen black */
       color: #fff;
-      margin: 0;
-      padding: 20px;
-      font-size: 32px;
       display: flex;
       flex-direction: column;
+      justify-content: flex-start;
       align-items: flex-start;
-      overflow-x: hidden;
-      overflow-y: auto;
-      position: relative;
+      padding: 20px;
+      font-size: 32px;
+      text-align: left;
+      overflow-x: hidden; /* prevent horizontal scroll */
+      margin: 0;
       transition: background-color 0.5s ease;
+      position: relative;
     }
 
     .line { display: block; }
@@ -34,83 +33,43 @@
 
     @keyframes blink { 50% { background-color: transparent; } }
 
-    .gallery, #timelinePage {
-      display: none;
-    }
-
-    .gallery img, #timelineContainer img {
-      width: 220px;  /* slightly bigger polaroids */
-      height: auto;
-      border-radius: 4px;
-      background: white;
-      padding: 12px 12px 40px 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      margin-bottom: 20px;
-      cursor: pointer;
-      transition: transform 0.25s ease;
-    }
-
-    .gallery img:hover, #timelineContainer img:hover {
-      transform: rotate(-2deg) scale(1.03);
-    }
-
-    .gallery img:nth-child(odd), #timelineContainer img:nth-child(odd) {
-      transform: rotate(2deg);
-    }
-
-    .gallery img:nth-child(3n), #timelineContainer img:nth-child(3n) {
-      transform: rotate(-3deg);
-    }
-
-    .gallery img::after, #timelineContainer img::after {
-      content: "";
-      position: absolute;
-      bottom: 8px;
-      left: 12px;
-      right: 12px;
-      height: 24px;
-      background: rgba(0,0,0,0.03);
-    }
-
-    #timelinePage {
+    /* --- GALLERIES --- */
+    .gallery {
       display: none;
       width: 100%;
-      min-height: 100vh;
-      background-color: #b18c65; /* hex wood color */
-      padding: 20px;
-      box-sizing: border-box;
+      column-count: 4;
+      column-gap: 20px;
+      margin-top: 20px;
     }
 
-    #timelinePage h2 {
-      font-size: 36px;
+    .gallery img {
+      width: 100%;
+      height: auto;
       margin-bottom: 20px;
-    }
-
-    #timelineContainer {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
+      border: 3px solid #fff;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.25s ease;
     }
 
     .backBtn {
       display: none;
       font-size: 24px;
       padding: 10px 20px;
-      background-color: #ff8fb1;
+      background-color: #ff69b4;
       color: #fff;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      margin-top: 30px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      margin-top: 10px;
     }
 
+    /* --- MODAL --- */
     #modal {
       display: none;
       position: fixed;
       top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100%; height: 100%;
       background: rgba(0,0,0,0.8);
       justify-content: center;
       align-items: center;
@@ -124,6 +83,14 @@
       border-radius: 10px;
     }
 
+    /* --- HI PAGE --- */
+    #hiPage {
+      display: none;
+      margin-top: 20px;
+      font-size: 48px;
+    }
+
+    /* --- POPUP --- */
     #popupText {
       display: none;
       position: fixed;
@@ -138,33 +105,94 @@
       z-index: 1100;
     }
 
-    /* Handwriting caption under polaroids */
+    /* --- TIMELINE PAGE --- */
+    #timelinePage {
+      display: none; /* hide initially */
+      width: 100%;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+      background-color: #b18c65; /* wood-like hex color */
+      overflow-x: hidden;
+    }
+
+    #timelinePage h2 {
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    #timelineContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    /* --- POLAROID IMAGES --- */
+    #timelineContainer img,
+    .gallery img {
+      width: 220px; /* slightly bigger */
+      padding: 12px 12px 40px 12px;
+      background: white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border-radius: 4px;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+
+    /* hover tilt */
+    #timelineContainer img:hover,
+    .gallery img:hover {
+      transform: rotate(-2deg) scale(1.03);
+    }
+
+    /* scrapbook rotation */
+    #timelineContainer img:nth-child(odd),
+    .gallery img:nth-child(odd) {
+      transform: rotate(2deg);
+    }
+
+    #timelineContainer img:nth-child(3n),
+    .gallery img:nth-child(3n) {
+      transform: rotate(-3deg);
+    }
+
+    /* caption styling */
     .caption {
-      font-family: 'Patrick Hand', cursive;
-      font-size: 18px;
+      position: absolute;
+      bottom: 10px;
+      left: 12px;
+      right: 12px;
       text-align: center;
-      margin-top: 8px;
+      font-family: "Brush Script MT", cursive;
+      font-size: 18px;
       color: #333;
+    }
+
+    /* --- REMOVE BLACK LINES --- */
+    html, body {
+      margin: 0;
+      padding: 0;
     }
   </style>
 </head>
 <body>
 
-  <!-- First typing screen -->
+  <!-- Terminal typing first page -->
   <div id="line1" class="line">&gt; </div><span class="cursor"></span>
   <div id="lineEllipsis1" class="line">&gt; </div>
   <div id="line2" class="line">&gt; </div>
   <div id="lineEllipsis2" class="line">&gt; </div>
   <div id="line3" class="line">&gt; </div>
-  <div id="preGalleryMessage">&gt; </div>
 
   <!-- Galleries -->
   <div id="gallery1" class="gallery"></div>
   <button id="backGallery1" class="backBtn">Back to Timeline</button>
+
   <div id="gallery2" class="gallery"></div>
   <button id="backGallery2" class="backBtn">Back to Timeline</button>
 
-  <!-- Timeline -->
+  <!-- Timeline page -->
   <div id="timelinePage">
     <h2>&gt; Our journey together</h2>
     <div id="timelineContainer"></div>
@@ -184,7 +212,7 @@
     const thirdMessage = "thank you for the best year :)";
 
     const gallery1Images = [
-      "DSC04631 2.jpg","7D1472D5-32AC-465B-A4EA-64FC38100E76.jpg","DSC05596.jpg","IMG_3965.jpg",
+      "DSC04631 2.jpg", "7D1472D5-32AC-465B-A4EA-64FC38100E76.jpg","DSC05596.jpg","IMG_3965.jpg",
       "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_5903.jpg","IMG_6072.jpg","IMG_6878.jpg","IMG_7537.jpg","IMG_6655.jpg",
       "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
     ];
@@ -199,19 +227,20 @@
     ];
 
     const imageMessages = {
-      "lp_image 5.jpg":"one of my favorite photos of you ever",
-      "lp_image 6.jpg":"this smile still makes my heart melt",
-      "lp_image.jpg":"you being effortlessly perfect",
-      "IMG_6276.jpg":"the day i realized i was in love with you",
-      "IMG_6274.jpg":"you looked unreal here",
-      "IMG_6273.jpg":"birthday boy (a date fully planned by me btw)",
-      "IMG_6271.jpg":"i was so proud to be with you this day",
-      "IMG_6269.jpg":"this photo makes me feel safe",
-      "IMG_5847.jpg":"our first adventure together"
+      "lp_image 5.jpg": "one of my favorite photos of you ever",
+      "lp_image 6.jpg": "this smile still makes my heart melt",
+      "lp_image.jpg": "you being effortlessly perfect",
+      "IMG_6276.jpg": "the day i realized i was in love with you",
+      "IMG_6274.jpg": "you looked unreal here",
+      "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)",
+      "IMG_6271.jpg": "i was so proud to be with you this day",
+      "IMG_6269.jpg": "this photo makes me feel safe",
+      "IMG_5847.jpg": "our first adventure together"
     };
 
     const galleries = [gallery1Images, gallery2Images];
 
+    // Typing functions
     function typeMessage(elementId, message, callback){
       let index=0;
       function t(){
@@ -235,6 +264,7 @@
       t();
     }
 
+    // Start typing
     function startTyping(){
       typeMessage("line1", firstMessage, ()=>{
         typeEllipsis("lineEllipsis1", ()=>{
@@ -246,38 +276,34 @@
         });
       });
     }
-
     window.onload=startTyping;
 
+    // Timeline
     function showTimelinePage(){
       document.querySelectorAll('.line, .cursor').forEach(el=>el.style.display='none');
       const timelinePage = document.getElementById("timelinePage");
       const container = document.getElementById("timelineContainer");
-      timelinePage.style.display="flex";
+      timelinePage.style.display="block";
       container.innerHTML = "";
 
       timelineImages.forEach(filename=>{
-        const wrapper = document.createElement("div");
-        wrapper.style.display="flex";
-        wrapper.style.flexDirection="column";
-        wrapper.style.alignItems="center";
-
         const img = document.createElement("img");
         img.src = "images/" + filename;
-        img.onclick = () => showGallery(timelineImages.indexOf(filename));
-        wrapper.appendChild(img);
 
+        // caption
         if(imageMessages[filename]){
           const caption = document.createElement("div");
           caption.className = "caption";
           caption.innerText = imageMessages[filename];
-          wrapper.appendChild(caption);
+          img.onload = ()=> img.parentNode.appendChild(caption);
         }
 
-        container.appendChild(wrapper);
+        img.onclick = ()=> showGallery(filename === "DSC04631 2.jpg" || filename === "IMG_6276.jpg" ? 0 : 1);
+        container.appendChild(img);
       });
     }
 
+    // Galleries
     function showGallery(index){
       document.getElementById("timelinePage").style.display="none";
       const galleryDiv = index===0 ? document.getElementById("gallery1") : document.getElementById("gallery2");
@@ -285,49 +311,31 @@
       const images = galleries[index];
 
       galleryDiv.innerHTML = "";
-      galleryDiv.style.display = "flex";
-      galleryDiv.style.flexWrap = "wrap";
-      galleryDiv.style.gap = "24px";
-      backBtn.style.display = "inline-block";
+      galleryDiv.style.display="block";
+      backBtn.style.display="inline-block";
 
       images.forEach(filename=>{
-        const wrapper = document.createElement("div");
-        wrapper.style.display = "flex";
-        wrapper.style.flexDirection = "column";
-        wrapper.style.alignItems = "center";
-
         const img = document.createElement("img");
         img.src = "images/" + filename;
         img.onclick = () => handleImageClick(filename, img.src);
-        wrapper.appendChild(img);
-
-        if(imageMessages[filename]){
-          const caption = document.createElement("div");
-          caption.className = "caption";
-          caption.innerText = imageMessages[filename];
-          wrapper.appendChild(caption);
-        }
-
-        galleryDiv.appendChild(wrapper);
+        galleryDiv.appendChild(img);
       });
 
-      backBtn.onclick = ()=>{
+      backBtn.onclick = () => {
         galleryDiv.style.display = "none";
         backBtn.style.display = "none";
         showTimelinePage();
       }
     }
 
+    // Modal & popup
     function handleImageClick(filename, src){
       const modal = document.getElementById("modal");
       const modalImg = document.getElementById("modalImg");
       modalImg.src = src;
       modal.style.display = "flex";
-
       const cleanName = filename.trim();
-      if(imageMessages[cleanName]){
-        showPopupMessage(imageMessages[cleanName]);
-      }
+      if(imageMessages[cleanName]) showPopupMessage(imageMessages[cleanName]);
     }
 
     function showPopupMessage(text){
@@ -335,13 +343,8 @@
       const popupMessage = document.getElementById("popupMessage");
       popup.style.display = "block";
       popupMessage.innerHTML = "";
-      let i = 0;
-      function typeChar(){
-        if(i<text.length){ 
-          popupMessage.innerHTML += text[i++]; 
-          setTimeout(typeChar, 60);
-        }
-      }
+      let i=0;
+      function typeChar(){ if(i<text.length){ popupMessage.innerHTML+=text[i++]; setTimeout(typeChar,60); }}
       typeChar();
       setTimeout(()=>{ popup.style.display="none"; }, 4000);
     }
