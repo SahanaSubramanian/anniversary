@@ -53,6 +53,34 @@
       border: 3px solid #fff;
       border-radius: 10px;
       cursor: pointer;
+      background: white;
+      padding: 12px 12px 40px 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border-radius: 4px;
+      position: relative;
+      transition: transform 0.25s ease;
+    }
+
+    .gallery img:hover {
+      transform: rotate(-2deg) scale(1.03);
+    }
+
+    .gallery img:nth-child(odd) {
+      transform: rotate(2deg);
+    }
+
+    .gallery img:nth-child(3n) {
+      transform: rotate(-3deg);
+    }
+
+    .gallery img::after {
+      content: "";
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      right: 12px;
+      height: 24px;
+      background: rgba(0,0,0,0.03);
     }
 
     .backBtn {
@@ -65,6 +93,7 @@
       border-radius: 10px;
       cursor: pointer;
       margin-top: 10px;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
     #modal {
@@ -105,13 +134,13 @@
       z-index: 1100;
     }
 
-    /* Timeline page */
     #timelinePage {
-      display: none; /* hide initially */
-      background-image: url("images/wood.jpg");
-      background-size: cover;
-      background-repeat: repeat;
-      background-position: center;
+      display: none;
+      background: #e6d3a3;
+      background-image: 
+        radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 4px 4px, 6px 6px;
       width: 100%;
       min-height: 100vh;
       padding: 20px;
@@ -119,32 +148,20 @@
     }
 
     #timelinePage h2 { font-size: 36px; }
-    #timelineContainer img { 
-      width: 200px; 
+
+    #timelineContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    #timelineContainer img {
+      width: 200px;
       height: 200px;
       object-fit: cover;
-      border: 3px solid white; 
-      border-radius: 10px; 
-      cursor: pointer; 
-      margin-bottom: 10px; 
-      margin-right: 10px;
-    }
-
-    /* --- POLAROID SCRAPBOOK THEME --- */
-    body {
-      background-color: #ffe6ef;
-    }
-
-    #timelinePage {
-      background: #e6d3a3;
-      background-image: 
-        radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-        radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
-      background-size: 4px 4px, 6px 6px;
-    }
-
-    .gallery img,
-    #timelineContainer img {
+      border: 3px solid white;
+      border-radius: 10px;
+      cursor: pointer;
       background: white;
       padding: 12px 12px 40px 12px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.25);
@@ -153,22 +170,18 @@
       transition: transform 0.25s ease;
     }
 
-    .gallery img:hover,
     #timelineContainer img:hover {
       transform: rotate(-2deg) scale(1.03);
     }
 
-    .gallery img:nth-child(odd),
     #timelineContainer img:nth-child(odd) {
       transform: rotate(2deg);
     }
 
-    .gallery img:nth-child(3n),
     #timelineContainer img:nth-child(3n) {
       transform: rotate(-3deg);
     }
 
-    .gallery img::after,
     #timelineContainer img::after {
       content: "";
       position: absolute;
@@ -177,18 +190,6 @@
       right: 12px;
       height: 24px;
       background: rgba(0,0,0,0.03);
-    }
-
-    #timelineContainer {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
-    }
-
-    .backBtn {
-      margin-top: 30px;
-      background: #ff8fb1;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
   </style>
@@ -305,4 +306,60 @@
       timelinePage.style.display="block";
       container.innerHTML = "";
       timelineImages.forEach((filename, index)=>{
-        const img = document.createElemen
+        const img = document.createElement("img");
+        img.src = "images/" + filename;
+        img.onclick = () => showGallery(index);
+        container.appendChild(img);
+      });
+    }
+
+    function showGallery(index){
+      document.getElementById("timelinePage").style.display="none";
+      const galleryDiv = index===0 ? document.getElementById("gallery1") : document.getElementById("gallery2");
+      const backBtn = index===0 ? document.getElementById("backGallery1") : document.getElementById("backGallery2");
+      const images = galleries[index];
+      galleryDiv.innerHTML = "";
+      galleryDiv.style.display = "block";
+      backBtn.style.display = "inline-block";
+      images.forEach(filename=>{
+        const img = document.createElement("img");
+        img.src = "images/"+filename;
+        img.onclick = () => handleImageClick(filename,img.src);
+        galleryDiv.appendChild(img);
+      });
+      backBtn.onclick = ()=>{
+        galleryDiv.style.display="none";
+        backBtn.style.display="none";
+        showTimelinePage();
+      }
+    }
+
+    function handleImageClick(filename, src){
+      const modal = document.getElementById("modal");
+      const modalImg = document.getElementById("modalImg");
+      modalImg.src = src;
+      modal.style.display = "flex";
+      const cleanName = filename.trim();
+      if(imageMessages[cleanName]) showPopupMessage(imageMessages[cleanName]);
+    }
+
+    function showPopupMessage(text){
+      const popup = document.getElementById("popupText");
+      const popupMessage = document.getElementById("popupMessage");
+      popup.style.display = "block";
+      popupMessage.innerHTML = "";
+      let i=0;
+      function typeChar(){
+        if(i<text.length){ popupMessage.innerHTML+=text[i++]; setTimeout(typeChar,60);}
+      }
+      typeChar();
+      setTimeout(()=>{ popup.style.display="none"; },4000);
+    }
+
+    document.getElementById("modal").addEventListener("click", ()=>{
+      document.getElementById("modal").style.display="none";
+    });
+
+  </script>
+</body>
+</html>
