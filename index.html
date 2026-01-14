@@ -107,14 +107,8 @@
     }
 
     /* Timeline page */
- /* Timeline page */
-
-
-
-
-    #timelinePage {
-      display: none; /* hide on first page */
-      background-image: url("images/wood.jpg"); /* wood texture */
+   #timelinePage {
+      background-image: url("images/wood.jpg");
       background-size: cover;
       background-repeat: repeat;
       background-position: center;
@@ -124,47 +118,18 @@
       box-sizing: border-box;
     }
 
-    /* Polaroid frame for all images in timeline and galleries */
-    .gallery img,
-    #timelineContainer img {
-      background: white;
-      padding: 12px 12px 40px 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      border-radius: 4px;
-      position: relative;
-      transition: transform 0.25s ease;
-      cursor: pointer;
-    }
 
-    /* Soft hover tilt */
-    .gallery img:hover,
-    #timelineContainer img:hover {
-      transform: rotate(-2deg) scale(1.03);
+    #timelinePage h2 { font-size: 36px; }
+    #timelineContainer img { 
+      width: 200px; 
+      height: 200px;
+      object-fit: cover;
+      border: 3px solid white; 
+      border-radius: 10px; 
+      cursor: pointer; 
+      margin-bottom: 10px; 
+      margin-right: 10px;
     }
-
-    /* Random rotation for scrapbook feel */
-    .gallery img:nth-child(odd),
-    #timelineContainer img:nth-child(odd) {
-      transform: rotate(2deg);
-    }
-
-    .gallery img:nth-child(3n),
-    #timelineContainer img:nth-child(3n) {
-      transform: rotate(-3deg);
-    }
-
-    /* Caption space effect under images */
-    .gallery img::after,
-    #timelineContainer img::after {
-      content: "";
-      position: absolute;
-      bottom: 8px;
-      left: 12px;
-      right: 12px;
-      height: 24px;
-      background: rgba(0,0,0,0.03);
-    }
-
 
         /* --- POLAROID SCRAPBOOK THEME --- */
 
@@ -172,7 +137,13 @@
       background-color: #ffe6ef;
     }
 
-    
+    #timelinePage {
+      background: #e6d3a3;
+      background-image: 
+        radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 4px 4px, 6px 6px;
+    }
 
 
     /* Polaroid frame for all images */
