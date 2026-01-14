@@ -4,10 +4,9 @@
   <title>❤️</title>
   <link href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&display=swap" rel="stylesheet">
   <style>
-    /* --- BODY & TYPING SCREEN --- */
     body {
       font-family: "Courier New", monospace;
-      background-color: #000; /* first screen black */
+      background-color: #000; /* First page black */
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -16,25 +15,18 @@
       padding: 20px;
       font-size: 32px;
       text-align: left;
-      overflow-x: hidden;
-      margin: 0;
+      overflow: auto;
       transition: background-color 0.5s ease;
       position: relative;
+      margin: 0;
     }
 
     .line { display: block; }
-    .cursor {
-      display: inline-block;
-      width: 10px;
-      background-color: #ffffff;
-      margin-left: 2px;
-      animation: blink 1s step-start infinite;
-    }
+    .cursor { display: inline-block; width: 10px; background-color: #fff; margin-left: 2px; animation: blink 1s step-start infinite; }
     @keyframes blink { 50% { background-color: transparent; } }
 
     #preGalleryMessage { display: none; font-size: 36px; color: #fff; margin-top: 20px; }
 
-    /* --- GALLERIES --- */
     .gallery {
       display: none;
       width: 100%;
@@ -44,17 +36,13 @@
     }
     .gallery img {
       width: 100%;
-      height: auto; /* keep aspect ratio */
+      height: auto;
       margin-bottom: 20px;
       border: 3px solid #fff;
       border-radius: 10px;
       cursor: pointer;
-      background: white;
-      padding: 12px 12px 40px 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      transition: transform 0.25s ease;
+      object-fit: cover;
     }
-    .gallery img:hover { transform: rotate(-2deg) scale(1.03); }
 
     .backBtn {
       display: none;
@@ -69,7 +57,6 @@
       box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
-    /* --- MODAL --- */
     #modal {
       display: none;
       position: fixed;
@@ -80,11 +67,15 @@
       align-items: center;
       z-index: 1000;
     }
-    #modal img { max-width: 90%; max-height: 90%; border: 5px solid #fff; border-radius: 10px; }
+    #modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border: 5px solid #fff;
+      border-radius: 10px;
+    }
 
     #hiPage { display: none; margin-top: 20px; font-size: 48px; }
 
-    /* --- POPUP --- */
     #popupText {
       display: none;
       position: fixed;
@@ -99,65 +90,65 @@
       z-index: 1100;
     }
 
-    /* --- TIMELINE --- */
+    /* Timeline page */
     #timelinePage {
-      display: none;
+      display: none; /* hide initially */
       width: 100%;
       min-height: 100vh;
+      background-color: #b18c65; /* wood-like hex color */
       padding: 20px;
       box-sizing: border-box;
-      background-color: #b18c65; /* hex background */
+      margin: 0;
     }
-    #timelinePage h2 { font-size: 36px; margin-bottom: 20px; }
-
+    #timelinePage h2 { font-size: 36px; margin: 0 0 20px 0; }
     #timelineContainer {
       display: flex;
       flex-wrap: wrap;
       gap: 24px;
     }
 
-    /* Timeline polaroids */
-    #timelineContainer .polaroid {
+    /* Polaroid styles */
+    .polaroid {
       width: 220px;
-      height: 280px;
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
       align-items: center;
-      overflow: hidden;
+      overflow: visible;
       background: white;
-      padding: 12px 12px 40px 12px;
+      padding: 12px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.25);
       border-radius: 4px;
       position: relative;
       transition: transform 0.25s ease;
+      cursor: pointer;
     }
-    #timelineContainer .polaroid:hover { transform: rotate(-2deg) scale(1.03); }
-    #timelineContainer .polaroid img {
+    .polaroid img {
       width: 100%;
       height: 200px;
       object-fit: cover;
       border-radius: 4px;
     }
-    #timelineContainer .caption {
+    .polaroid .caption {
       font-family: 'Shadows Into Light', cursive;
       font-size: 16px;
       text-align: center;
       margin-top: 8px;
     }
+    .polaroid:hover { transform: rotate(-2deg) scale(1.03); }
+    .polaroid:nth-child(odd) { transform: rotate(2deg); }
+    .polaroid:nth-child(3n) { transform: rotate(-3deg); }
 
   </style>
 </head>
 <body>
 
-  <!-- Typing first page -->
+  <!-- Terminal typing first page -->
   <div id="line1" class="line">&gt; </div><span class="cursor"></span>
   <div id="lineEllipsis1" class="line">&gt; </div>
   <div id="line2" class="line">&gt; </div>
   <div id="lineEllipsis2" class="line">&gt; </div>
   <div id="line3" class="line">&gt; </div>
-  <div id="line4" class="line">&gt; </div>
-  <div id="line5" class="line">&gt; </div>
 
   <div id="preGalleryMessage">&gt; </div>
 
@@ -168,7 +159,10 @@
   <div id="gallery2" class="gallery"></div>
   <button id="backGallery2" class="backBtn">Back to Timeline</button>
 
-  <!-- Timeline -->
+  <!-- Black hi screen -->
+  <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
+
+  <!-- Timeline page -->
   <div id="timelinePage">
     <h2>&gt; Our journey together</h2>
     <div id="timelineContainer"></div>
@@ -186,25 +180,23 @@
     const firstMessage = "hi aarjav!!";
     const secondMessage = "happy anniversary ♥";
     const thirdMessage = "thank you for the best year :)";
-    const fourthMessage = "";
-    const fifthMessage = "";
 
     const gallery1Images = [
-      "DSC04631 2.jpg","7D1472D5-32AC-465B-A4EA-64FC38100E76.jpg","DSC05596.jpg","IMG_3965.jpg",
-      "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_5903.jpg","IMG_6072.jpg",
-      "IMG_6878.jpg","IMG_7537.jpg","IMG_6655.jpg","IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
+      "DSC04631 2.jpg", "7D1472D5-32AC-465B-A4EA-64FC38100E76.jpg","DSC05596.jpg","IMG_3965.jpg",
+      "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_5903.jpg","IMG_6072.jpg","IMG_6878.jpg","IMG_7537.jpg","IMG_6655.jpg",
+      "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
     ];
-
     const gallery2Images = [
-      "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg","IMG_3084.jpg","IMG_2167.jpg",
-      "IMG_1292.jpg","DSC06549.jpg"
+      "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
+      "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg"
     ];
 
+    // Timeline images with captions
     const timelineImages = [
-      {file:"DSC04631 2.jpg", caption:"The start of everything"},
-      {file:"IMG_6276.jpg", caption:"Day I realized I was in love"},
-      {file:"IMG_5847.jpg", caption:"Our first adventure"},
-      {file:"wood.jpg", caption:"Memory frame"}
+      {file:"DSC04631 2.jpg", caption:"first day together"},
+      {file:"IMG_6276.jpg", caption:"so happy here"},
+      {file:"IMG_5847.jpg", caption:"our first adventure"},
+      {file:"wood.jpg", caption:"the background vibe"}
     ];
 
     const imageMessages = {
@@ -221,23 +213,23 @@
 
     const galleries = [gallery1Images, gallery2Images];
 
-    // Typing functions
     function typeMessage(elementId, message, callback){
       let index=0;
       function t(){
-        if(index<message.length){
-          document.getElementById(elementId).innerHTML+=message[index++];
+        if(index<message.length){ 
+          document.getElementById(elementId).innerHTML+=message[index++]; 
           setTimeout(t,speed);
         } else if(callback) callback();
       }
       t();
     }
+
     function typeEllipsis(elementId, callback){
       const ellipsis = "...";
       let index=0;
       function t(){
-        if(index<ellipsis.length){
-          document.getElementById(elementId).innerHTML+=ellipsis[index++];
+        if(index<ellipsis.length){ 
+          document.getElementById(elementId).innerHTML+=ellipsis[index++]; 
           setTimeout(t,speed);
         } else if(callback) setTimeout(callback,300);
       }
@@ -257,10 +249,8 @@
     }
     window.onload=startTyping;
 
-    // Timeline
     function showTimelinePage(){
       document.querySelectorAll('.line, .cursor').forEach(el=>el.style.display='none');
-
       const timelinePage = document.getElementById("timelinePage");
       const container = document.getElementById("timelineContainer");
       timelinePage.style.display="block";
@@ -280,22 +270,24 @@
         polaroid.appendChild(img);
         polaroid.appendChild(caption);
 
-        polaroid.onclick = () => showGallery(item.file==="DSC04631 2.jpg"?0:1);
+        polaroid.addEventListener("click", ()=>{
+          const index = item.file === "DSC04631 2.jpg" ? 0 : 1;
+          showGallery(index);
+        });
+
         container.appendChild(polaroid);
       });
     }
 
-    // Show gallery
     function showGallery(index){
       document.getElementById("timelinePage").style.display="none";
-
-      const galleryDiv = index===0?document.getElementById("gallery1"):document.getElementById("gallery2");
-      const backBtn = index===0?document.getElementById("backGallery1"):document.getElementById("backGallery2");
+      const galleryDiv = index===0 ? document.getElementById("gallery1") : document.getElementById("gallery2");
+      const backBtn = index===0 ? document.getElementById("backGallery1") : document.getElementById("backGallery2");
       const images = galleries[index];
 
       galleryDiv.innerHTML = "";
       galleryDiv.style.display="block";
-      backBtn.style.display="inline-block";
+      backBtn.style.display = "inline-block";
 
       images.forEach(filename=>{
         const img = document.createElement("img");
@@ -305,37 +297,35 @@
       });
 
       backBtn.onclick = () => {
-        galleryDiv.style.display="none";
-        backBtn.style.display="none";
+        galleryDiv.style.display = "none";
+        backBtn.style.display = "none";
         showTimelinePage();
       }
     }
 
-    // Modal + popup
     function handleImageClick(filename, src){
       const modal = document.getElementById("modal");
       const modalImg = document.getElementById("modalImg");
       modalImg.src = src;
       modal.style.display = "flex";
-
       const cleanName = filename.trim();
-      if(imageMessages[cleanName]) showPopupMessage(imageMessages[cleanName]);
+      if (imageMessages[cleanName]) showPopupMessage(imageMessages[cleanName]);
     }
 
     function showPopupMessage(text){
       const popup = document.getElementById("popupText");
       const popupMessage = document.getElementById("popupMessage");
-      popup.style.display="block";
+      popup.style.display = "block";
       popupMessage.innerHTML = "";
-      let i=0;
+      let i = 0;
       function typeChar(){
-        if(i<text.length){
-          popupMessage.innerHTML += text[i++];
-          setTimeout(typeChar,60);
+        if(i<text.length){ 
+          popupMessage.innerHTML += text[i++]; 
+          setTimeout(typeChar, 60);
         }
       }
       typeChar();
-      setTimeout(()=>{ popup.style.display="none"; },4000);
+      setTimeout(()=>{ popup.style.display="none"; }, 4000);
     }
 
     document.getElementById("modal").addEventListener("click", ()=>{
