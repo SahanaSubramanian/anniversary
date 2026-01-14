@@ -251,7 +251,7 @@
     ];
 
     const timelineImages = [
-      "DSC04631 2.jpg","IMG_6276.jpg","IMG_5847.jpg"
+      "DSC04631 2.jpg","IMG_6276.jpg","IMG_5847.jpg,woodjpg.png"
     ];
 
     const imageMessages = {
@@ -313,8 +313,7 @@
     // Show timeline
     function showTimelinePage(){
       document.querySelectorAll('.line, .cursor').forEach(el=>el.style.display='none');
-      document.body.style.backgroundColor="#ffb6c1";
-
+      
       const timelinePage = document.getElementById("timelinePage");
       const container = document.getElementById("timelineContainer");
       timelinePage.style.display="block";
