@@ -5,7 +5,7 @@
   <style>
     body {
       font-family: "Courier New", monospace;
-      background-color: #000;
+      background-color: #000; /* First page black */
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -65,14 +65,8 @@
       transform: rotate(-2deg) scale(1.03);
     }
 
-    .gallery img:nth-child(odd) {
-      transform: rotate(2deg);
-    }
-
-    .gallery img:nth-child(3n) {
-      transform: rotate(-3deg);
-    }
-
+    .gallery img:nth-child(odd) { transform: rotate(2deg); }
+    .gallery img:nth-child(3n) { transform: rotate(-3deg); }
     .gallery img::after {
       content: "";
       position: absolute;
@@ -134,17 +128,17 @@
       z-index: 1100;
     }
 
+    /* Timeline page with full wood background */
     #timelinePage {
       display: none;
-      background: #e6d3a3;
-      background-image: 
-        radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-        radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
-      background-size: 4px 4px, 6px 6px;
       width: 100%;
       min-height: 100vh;
       padding: 20px;
       box-sizing: border-box;
+      background-image: url("images/wood.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
     }
 
     #timelinePage h2 { font-size: 36px; }
@@ -170,18 +164,9 @@
       transition: transform 0.25s ease;
     }
 
-    #timelineContainer img:hover {
-      transform: rotate(-2deg) scale(1.03);
-    }
-
-    #timelineContainer img:nth-child(odd) {
-      transform: rotate(2deg);
-    }
-
-    #timelineContainer img:nth-child(3n) {
-      transform: rotate(-3deg);
-    }
-
+    #timelineContainer img:hover { transform: rotate(-2deg) scale(1.03); }
+    #timelineContainer img:nth-child(odd) { transform: rotate(2deg); }
+    #timelineContainer img:nth-child(3n) { transform: rotate(-3deg); }
     #timelineContainer img::after {
       content: "";
       position: absolute;
