@@ -3,24 +3,20 @@
 <head>
   <title>❤️</title>
   <style>
-    /* --- BODY & FIRST PAGE --- */
     body {
       font-family: "Courier New", monospace;
-      background-color: #000; /* first page black */
+      background-color: #000;
       color: #fff;
-      margin: 0;
-      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding: 20px;
       font-size: 32px;
       text-align: left;
-      overflow-x: hidden;
-      overflow-y: auto;
+      overflow: auto;
       transition: background-color 0.5s ease;
       position: relative;
-    }
-
-    /* Wrapper for first page text */
-    #firstPageWrapper {
-      padding: 20px;
     }
 
     .line { display: block; }
@@ -42,7 +38,6 @@
       margin-top: 20px;
     }
 
-    /* --- GALLERIES --- */
     .gallery {
       display: none;
       width: 100%;
@@ -58,16 +53,7 @@
       border: 3px solid #fff;
       border-radius: 10px;
       cursor: pointer;
-      background: white;
-      padding: 12px 12px 40px 12px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      position: relative;
-      transition: transform 0.25s ease;
     }
-
-    .gallery img:hover { transform: rotate(-2deg) scale(1.03); }
-    .gallery img:nth-child(odd) { transform: rotate(2deg); }
-    .gallery img:nth-child(3n) { transform: rotate(-3deg); }
 
     .backBtn {
       display: none;
@@ -79,10 +65,8 @@
       border-radius: 10px;
       cursor: pointer;
       margin-top: 10px;
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
-    /* --- MODAL --- */
     #modal {
       display: none;
       position: fixed;
@@ -107,7 +91,7 @@
       font-size: 48px;
     }
 
-    /* --- POPUP --- */
+    /* Popup message */
     #popupText {
       display: none;
       position: fixed;
@@ -122,27 +106,77 @@
       z-index: 1100;
     }
 
-    /* --- TIMELINE PAGE --- */
+    /* Timeline page */
+ /* Timeline page */
+
+
+
+
     #timelinePage {
-      display: none; /* hide initially */
-      width: 100vw;
-      min-height: 100vh;
-      padding: 40px; /* spacing inside for polaroids */
-      box-sizing: border-box;
-      background-image: url("images/wood.jpg");
+      display: none; /* hide on first page */
+      background-image: url("images/wood.jpg"); /* wood texture */
       background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center center;
+      background-repeat: repeat;
+      background-position: center;
+      width: 100%;
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
     }
 
-    #timelinePage h2 { font-size: 36px; }
-
-    #timelineContainer {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 24px;
+    /* Polaroid frame for all images in timeline and galleries */
+    .gallery img,
+    #timelineContainer img {
+      background: white;
+      padding: 12px 12px 40px 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border-radius: 4px;
+      position: relative;
+      transition: transform 0.25s ease;
+      cursor: pointer;
     }
 
+    /* Soft hover tilt */
+    .gallery img:hover,
+    #timelineContainer img:hover {
+      transform: rotate(-2deg) scale(1.03);
+    }
+
+    /* Random rotation for scrapbook feel */
+    .gallery img:nth-child(odd),
+    #timelineContainer img:nth-child(odd) {
+      transform: rotate(2deg);
+    }
+
+    .gallery img:nth-child(3n),
+    #timelineContainer img:nth-child(3n) {
+      transform: rotate(-3deg);
+    }
+
+    /* Caption space effect under images */
+    .gallery img::after,
+    #timelineContainer img::after {
+      content: "";
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      right: 12px;
+      height: 24px;
+      background: rgba(0,0,0,0.03);
+    }
+
+
+        /* --- POLAROID SCRAPBOOK THEME --- */
+
+    body {
+      background-color: #ffe6ef;
+    }
+
+    
+
+
+    /* Polaroid frame for all images */
+    .gallery img,
     #timelineContainer img {
       background: white;
       padding: 12px 12px 40px 12px;
@@ -152,44 +186,82 @@
       transition: transform 0.25s ease;
     }
 
-    #timelineContainer img:hover { transform: rotate(-2deg) scale(1.03); }
-    #timelineContainer img:nth-child(odd) { transform: rotate(2deg); }
-    #timelineContainer img:nth-child(3n) { transform: rotate(-3deg); }
+    /* soft hover tilt */
+    .gallery img:hover,
+    #timelineContainer img:hover {
+      transform: rotate(-2deg) scale(1.03);
+    }
+
+    /* random rotation for scrapbook feel */
+    .gallery img:nth-child(odd),
+    #timelineContainer img:nth-child(odd) {
+      transform: rotate(2deg);
+    }
+
+    .gallery img:nth-child(3n),
+    #timelineContainer img:nth-child(3n) {
+      transform: rotate(-3deg);
+    }
+
+    /* caption space effect */
+    .gallery img::after,
+    #timelineContainer img::after {
+      content: "";
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      right: 12px;
+      height: 24px;
+      background: rgba(0,0,0,0.03);
+    }
+
+    /* timeline layout */
+    #timelineContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    /* Back buttons */
+    .backBtn {
+      margin-top: 30px;
+      background: #ff8fb1;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
   </style>
 </head>
 <body>
 
-  <!-- FIRST PAGE -->
-  <div id="firstPageWrapper">
-    <div id="line1" class="line">&gt; </div><span class="cursor"></span>
-    <div id="lineEllipsis1" class="line">&gt; </div>
-    <div id="line2" class="line">&gt; </div>
-    <div id="lineEllipsis2" class="line">&gt; </div>
-    <div id="line3" class="line">&gt; </div>
-  </div>
+  <!-- Terminal typing first page -->
+  <div id="line1" class="line">&gt; </div><span class="cursor"></span>
+  <div id="lineEllipsis1" class="line">&gt; </div>
+  <div id="line2" class="line">&gt; </div>
+  <div id="lineEllipsis2" class="line">&gt; </div>
+  <div id="line3" class="line">&gt; </div>
 
   <div id="preGalleryMessage">&gt; </div>
 
-  <!-- GALLERIES -->
+  <!-- Galleries -->
   <div id="gallery1" class="gallery"></div>
   <button id="backGallery1" class="backBtn">Back to Timeline</button>
 
   <div id="gallery2" class="gallery"></div>
   <button id="backGallery2" class="backBtn">Back to Timeline</button>
 
-  <!-- HI PAGE -->
+  <!-- Black hi screen -->
   <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
 
-  <!-- TIMELINE PAGE -->
+  <!-- Timeline page -->
   <div id="timelinePage">
     <h2>&gt; Our journey together</h2>
     <div id="timelineContainer"></div>
   </div>
 
-  <!-- MODAL -->
+  <!-- Modal -->
   <div id="modal"><img id="modalImg" src=""></div>
 
-  <!-- POPUP -->
+  <!-- Popup message -->
   <div id="popupText"><span id="popupMessage"></span></div>
 
   <script>
@@ -200,9 +272,9 @@
     const thirdMessage = "thank you for the best year :)";
 
     const gallery1Images = [
-      "DSC04631 2.jpg","7D1472D5-32AC-465B-A4EA-64FC38100E76.jpg","DSC05596.jpg","IMG_3965.jpg",
-      "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_5903.jpg","IMG_6072.jpg",
-      "IMG_6878.jpg","IMG_7537.jpg","IMG_6655.jpg","IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
+      "DSC04631 2.jpg", "7D1472D5-32AC-465B-A4EA-64FC38100E76.jpg","DSC05596.jpg","IMG_3965.jpg",
+      "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_5903.jpg","IMG_6072.jpg","IMG_6878.jpg","IMG_7537.jpg","IMG_6655.jpg",
+      "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
     ];
 
     const gallery2Images = [
@@ -215,6 +287,7 @@
     ];
 
     const imageMessages = {
+      // Gallery 1 — all unique popups 💌
       "lp_image 5.jpg": "one of my favorite photos of you ever",
       "lp_image 6.jpg": "this smile still makes my heart melt",
       "lp_image.jpg": "you being effortlessly perfect",
@@ -223,11 +296,15 @@
       "IMG_6273.jpg": "birthday boy (a date fully planned by me btw)",
       "IMG_6271.jpg": "i was so proud to be with you this day",
       "IMG_6269.jpg": "this photo makes me feel safe",
+
+      // Gallery 2 (you already have this one, keeping it)
       "IMG_5847.jpg": "our first adventure together"
     };
 
-    const galleries = [gallery1Images, gallery2Images];
 
+    const galleries = [gallery1Images, gallery2Images]; // timeline index → gallery
+
+    // Typing functions
     function typeMessage(elementId, message, callback){
       let index=0;
       function t(){
@@ -251,6 +328,7 @@
       t();
     }
 
+    // Start typing
     function startTyping(){
       typeMessage("line1", firstMessage, ()=>{
         typeEllipsis("lineEllipsis1", ()=>{
@@ -264,67 +342,84 @@
     }
     window.onload=startTyping;
 
+    // Show timeline
     function showTimelinePage(){
-      document.getElementById("firstPageWrapper").style.display = "none";
       document.querySelectorAll('.line, .cursor').forEach(el=>el.style.display='none');
+      
       const timelinePage = document.getElementById("timelinePage");
       const container = document.getElementById("timelineContainer");
       timelinePage.style.display="block";
-      container.innerHTML = "";
-      timelineImages.forEach((filename,index)=>{
+      container.innerHTML = ""; // clear previous
+
+      timelineImages.forEach((filename, index)=>{
         const img = document.createElement("img");
-        img.src = "images/"+filename;
+        img.src = "images/" + filename;
         img.onclick = () => showGallery(index);
         container.appendChild(img);
       });
     }
 
+    // Show gallery by index
     function showGallery(index){
       document.getElementById("timelinePage").style.display="none";
+
       const galleryDiv = index===0 ? document.getElementById("gallery1") : document.getElementById("gallery2");
       const backBtn = index===0 ? document.getElementById("backGallery1") : document.getElementById("backGallery2");
       const images = galleries[index];
 
-      galleryDiv.innerHTML = "";
+      galleryDiv.innerHTML = ""; // clear previous
       galleryDiv.style.display="block";
       backBtn.style.display = "inline-block";
 
       images.forEach(filename=>{
         const img = document.createElement("img");
-        img.src = "images/"+filename;
-        img.onclick = () => handleImageClick(filename,img.src);
+        img.src = "images/" + filename;
+        img.onclick = () => handleImageClick(filename, img.src);
         galleryDiv.appendChild(img);
       });
 
-      backBtn.onclick = ()=>{
-        galleryDiv.style.display="none";
-        backBtn.style.display="none";
+      // Back button goes to timeline
+      backBtn.onclick = () => {
+        galleryDiv.style.display = "none";
+        backBtn.style.display = "none";
         showTimelinePage();
       }
     }
 
+    // Handle modal and popup
     function handleImageClick(filename, src){
       const modal = document.getElementById("modal");
       const modalImg = document.getElementById("modalImg");
+
       modalImg.src = src;
       modal.style.display = "flex";
+
+      // Always trust the filename variable, not the src
       const cleanName = filename.trim();
-      if(imageMessages[cleanName]) showPopupMessage(imageMessages[cleanName]);
+
+      if (imageMessages[cleanName]) {
+        showPopupMessage(imageMessages[cleanName]);
+      }
     }
+
 
     function showPopupMessage(text){
       const popup = document.getElementById("popupText");
       const popupMessage = document.getElementById("popupMessage");
       popup.style.display = "block";
       popupMessage.innerHTML = "";
-      let i=0;
+      let i = 0;
       function typeChar(){
-        if(i<text.length){ popupMessage.innerHTML+=text[i++]; setTimeout(typeChar,60);}
+        if(i<text.length){ 
+          popupMessage.innerHTML += text[i++]; 
+          setTimeout(typeChar, 60);
+        }
       }
       typeChar();
-      setTimeout(()=>{ popup.style.display="none"; },4000);
+      setTimeout(()=>{ popup.style.display="none"; }, 4000);
     }
 
+    // Close modal on click
     document.getElementById("modal").addEventListener("click", ()=>{
       document.getElementById("modal").style.display="none";
     });
