@@ -3,10 +3,9 @@
 <head>
   <title>❤️</title>
   <style>
-    /* --- BODY & FIRST PAGE --- */
     body {
       font-family: "Courier New", monospace;
-      background-color: #000; /* black for first page */
+      background-color: #000; /* first page black */
       color: #fff;
       margin: 0;
       padding: 20px;
@@ -37,7 +36,6 @@
       margin-top: 20px;
     }
 
-    /* --- GALLERIES --- */
     .gallery {
       display: none;
       width: 100%;
@@ -50,9 +48,9 @@
       width: 100%;
       height: auto;
       margin-bottom: 20px;
+      border: 3px solid #fff;
+      border-radius: 10px;
       cursor: pointer;
-      position: relative;
-      transition: transform 0.3s ease;
     }
 
     .backBtn {
@@ -68,7 +66,6 @@
       box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
-    /* --- MODAL --- */
     #modal {
       display: none;
       position: fixed;
@@ -93,7 +90,6 @@
       font-size: 48px;
     }
 
-    /* --- POPUP --- */
     #popupText {
       display: none;
       position: fixed;
@@ -108,13 +104,12 @@
       z-index: 1100;
     }
 
-    /* --- TIMELINE PAGE (WOOD + POLAROID) --- */
+    /* --- TIMELINE PAGE (WOOD EDGE-TO-EDGE) --- */
     #timelinePage {
       display: none; /* hide initially */
-      position: relative;
       width: 100vw;
       min-height: 100vh;
-      padding: 40px;
+      padding: 20px; /* same as before */
       box-sizing: border-box;
       background-image: url("images/wood.jpg");
       background-size: cover;
@@ -133,29 +128,25 @@
     #timelineContainer {
       display: flex;
       flex-wrap: wrap;
-      gap: 30px;
-      justify-content: center;
+      gap: 24px; /* same as before */
     }
 
-    /* Polaroid frame for all images in galleries and timeline */
+    /* POLAROID STYLE SAME AS ORIGINAL */
     .gallery img,
     #timelineContainer img {
       background: white;
-      padding: 12px 12px 50px 12px; /* more space for captions */
-      box-shadow: 0 12px 25px rgba(0,0,0,0.4);
-      border-radius: 6px;
+      padding: 12px 12px 40px 12px; /* same as original */
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border-radius: 4px;
       position: relative;
-      transition: transform 0.3s ease;
-      cursor: pointer;
+      transition: transform 0.25s ease;
     }
 
-    /* Soft hover tilt */
     .gallery img:hover,
     #timelineContainer img:hover {
-      transform: rotate(-2deg) scale(1.05);
+      transform: rotate(-2deg) scale(1.03);
     }
 
-    /* Random rotation for scrapbook feel */
     .gallery img:nth-child(odd),
     #timelineContainer img:nth-child(odd) {
       transform: rotate(2deg);
@@ -166,20 +157,21 @@
       transform: rotate(-3deg);
     }
 
-    /* Caption space effect */
+    /* Timeline captions (optional, if you want text under polaroids) */
     .gallery img::after,
     #timelineContainer img::after {
       content: attr(data-caption);
       position: absolute;
-      bottom: 12px;
+      bottom: 8px;
       left: 12px;
       right: 12px;
+      height: 24px;
       font-size: 16px;
       color: #333;
       text-align: center;
       background: rgba(255,255,255,0.7);
-      padding: 2px 6px;
       border-radius: 4px;
+      padding: 2px 6px;
       font-family: "Courier New", monospace;
     }
   </style>
@@ -253,7 +245,6 @@
 
     const galleries = [gallery1Images, gallery2Images];
 
-    // Typing functions
     function typeMessage(elementId, message, callback){
       let index=0;
       function t(){
@@ -277,7 +268,6 @@
       t();
     }
 
-    // Start typing
     function startTyping(){
       typeMessage("line1", firstMessage, ()=>{
         typeEllipsis("lineEllipsis1", ()=>{
@@ -291,25 +281,22 @@
     }
     window.onload=startTyping;
 
-    // Show timeline
     function showTimelinePage(){
       document.querySelectorAll('.line, .cursor').forEach(el=>el.style.display='none');
-      
       const timelinePage = document.getElementById("timelinePage");
       const container = document.getElementById("timelineContainer");
       timelinePage.style.display="block";
       container.innerHTML = "";
 
-      timelineImages.forEach((filename, index)=>{
+      timelineImages.forEach((filename)=>{
         const img = document.createElement("img");
         img.src = "images/" + filename;
-        img.dataset.caption = imageMessages[filename] || ""; // Polaroid caption
-        img.onclick = () => showGallery(index);
+        img.dataset.caption = imageMessages[filename] || "";
+        img.onclick = () => showGallery(timelineImages.indexOf(filename));
         container.appendChild(img);
       });
     }
 
-    // Show gallery by index
     function showGallery(index){
       document.getElementById("timelinePage").style.display="none";
 
@@ -324,7 +311,7 @@
       images.forEach(filename=>{
         const img = document.createElement("img");
         img.src = "images/" + filename;
-        img.dataset.caption = imageMessages[filename] || ""; // Polaroid caption
+        img.dataset.caption = imageMessages[filename] || "";
         img.onclick = () => handleImageClick(filename, img.src);
         galleryDiv.appendChild(img);
       });
@@ -339,12 +326,10 @@
     function handleImageClick(filename, src){
       const modal = document.getElementById("modal");
       const modalImg = document.getElementById("modalImg");
-
       modalImg.src = src;
       modal.style.display = "flex";
 
       const cleanName = filename.trim();
-
       if (imageMessages[cleanName]) {
         showPopupMessage(imageMessages[cleanName]);
       }
