@@ -163,6 +163,12 @@
   <div id="gallery2" class="gallery"></div>
   <button id="backGallery2" class="backBtn">Back to Timeline</button>
 
+  <div id="gallery3" class="gallery"></div>
+  <button id="backGallery3" class="backBtn">Back to Timeline</button>
+
+  <div id="gallery4" class="gallery"></div>
+  <button id="backGallery4" class="backBtn">Back to Timeline</button>
+
   <!-- Black hi screen -->
   <div id="hiPage">&gt; <span id="hiText"></span><span class="cursor"></span></div>
 
@@ -186,13 +192,19 @@
     const thirdMessage = "thank you for the best year :)";
 
     const gallery1Images = [
-      "DSC04631 2.jpg", "7D1472D5-32AC-465B-A4EA-64FC38100E76.jpg","DSC05596.jpg","IMG_3965.jpg",
+      "DSC04631 2.jpg","7D1472D5-32AC-465B-A4EA-64FC38100E76.jpg","DSC05596.jpg","IMG_3965.jpg",
       "lp_image 5.jpg","lp_image 6.jpg","lp_image.jpg","IMG_6276.jpg","IMG_5903.jpg","IMG_6072.jpg","IMG_6878.jpg","IMG_7537.jpg","IMG_6655.jpg",
       "IMG_6274.jpg","IMG_6273.jpg","IMG_6271.jpg","IMG_6269.jpg"
     ];
     const gallery2Images = [
       "IMG_5847.jpg","IMG_4659.jpg","IMG_3867.jpg","IMG_3586.jpg",
       "IMG_3084.jpg","IMG_2167.jpg","IMG_1292.jpg","DSC06549.jpg"
+    ];
+    const gallery3Images = [
+      "extra1.jpg","extra2.jpg","extra3.jpg"   // replace with actual images for 3rd timeline polaroid
+    ];
+    const gallery4Images = [
+      "extra4.jpg","extra5.jpg","extra6.jpg"   // replace with actual images for 4th timeline polaroid
     ];
 
     // Timeline images with captions
@@ -215,7 +227,7 @@
       "IMG_5847.jpg": "our first adventure together"
     };
 
-    const galleries = [gallery1Images, gallery2Images];
+    const galleries = [gallery1Images, gallery2Images, gallery3Images, gallery4Images];
 
     function typeMessage(elementId, message, callback){
       let index=0;
@@ -260,7 +272,7 @@
       timelinePage.style.display="block";
       container.innerHTML = "";
 
-      timelineImages.forEach(item=>{
+      timelineImages.forEach((item, idx)=>{
         const polaroid = document.createElement("div");
         polaroid.className = "polaroid";
 
@@ -275,8 +287,7 @@
         polaroid.appendChild(caption);
 
         polaroid.addEventListener("click", ()=>{
-          const index = item.file === "DSC04631 2.jpg" ? 0 : 1;
-          showGallery(index);
+          showGallery(idx); // 0 → gallery1, 1 → gallery2, 2 → gallery3, 3 → gallery4
         });
 
         container.appendChild(polaroid);
@@ -285,8 +296,9 @@
 
     function showGallery(index){
       document.getElementById("timelinePage").style.display="none";
-      const galleryDiv = index===0 ? document.getElementById("gallery1") : document.getElementById("gallery2");
-      const backBtn = index===0 ? document.getElementById("backGallery1") : document.getElementById("backGallery2");
+
+      const galleryDiv = document.getElementById("gallery"+(index+1));
+      const backBtn = document.getElementById("backGallery"+(index+1));
       const images = galleries[index];
 
       galleryDiv.innerHTML = "";
