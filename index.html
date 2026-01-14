@@ -119,12 +119,15 @@
     #timelinePage h2 { font-size: 36px; }
     #timelineContainer img { 
       width: 200px; 
+      height: 200px;
+      object-fit: cover;
       border: 3px solid white; 
       border-radius: 10px; 
       cursor: pointer; 
       margin-bottom: 10px; 
       margin-right: 10px;
     }
+
         /* --- POLAROID SCRAPBOOK THEME --- */
 
     body {
@@ -132,14 +135,13 @@
     }
 
     #timelinePage {
-      background: repeating-linear-gradient(
-        0deg,
-        #fff,
-        #fff 28px,
-        #ffeef4 29px,
-        #ffeef4 30px
-      );
+      background: #e6d3a3;
+      background-image: 
+        radial-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        radial-gradient(rgba(0,0,0,0.04) 1px, transparent 1px);
+      background-size: 4px 4px, 6px 6px;
     }
+
 
     /* Polaroid frame for all images */
     .gallery img,
