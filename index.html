@@ -125,6 +125,76 @@
       margin-bottom: 10px; 
       margin-right: 10px;
     }
+        /* --- POLAROID SCRAPBOOK THEME --- */
+
+    body {
+      background-color: #ffe6ef;
+    }
+
+    #timelinePage {
+      background: repeating-linear-gradient(
+        0deg,
+        #fff,
+        #fff 28px,
+        #ffeef4 29px,
+        #ffeef4 30px
+      );
+    }
+
+    /* Polaroid frame for all images */
+    .gallery img,
+    #timelineContainer img {
+      background: white;
+      padding: 12px 12px 40px 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      border-radius: 4px;
+      position: relative;
+      transition: transform 0.25s ease;
+    }
+
+    /* soft hover tilt */
+    .gallery img:hover,
+    #timelineContainer img:hover {
+      transform: rotate(-2deg) scale(1.03);
+    }
+
+    /* random rotation for scrapbook feel */
+    .gallery img:nth-child(odd),
+    #timelineContainer img:nth-child(odd) {
+      transform: rotate(2deg);
+    }
+
+    .gallery img:nth-child(3n),
+    #timelineContainer img:nth-child(3n) {
+      transform: rotate(-3deg);
+    }
+
+    /* caption space effect */
+    .gallery img::after,
+    #timelineContainer img::after {
+      content: "";
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      right: 12px;
+      height: 24px;
+      background: rgba(0,0,0,0.03);
+    }
+
+    /* timeline layout */
+    #timelineContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    /* Back buttons */
+    .backBtn {
+      margin-top: 30px;
+      background: #ff8fb1;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    }
+
   </style>
 </head>
 <body>
